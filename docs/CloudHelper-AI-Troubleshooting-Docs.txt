@@ -1,0 +1,627 @@
+================================================================
+CLOUDHELPER AI - COMPLETE TROUBLESHOOTING DOCUMENTATION
+Built by Anirudh Jagannadh
+Covers: AWS | Microsoft Azure | Google Cloud Platform (GCP)
+================================================================
+
+================================================================
+SECTION 1 - COMMON ERROR MESSAGES & FIXES
+================================================================
+
+------------------------------------------------------------
+AWS COMMON ERRORS
+------------------------------------------------------------
+
+ERROR: AccessDenied - Access Denied
+CAUSE: IAM user/role missing required permissions
+FIX:
+Step 1: Go to AWS Console → IAM
+Step 2: Find your user or role
+Step 3: Click Permissions → Add permissions
+Step 4: Attach the required policy
+Step 5: Wait 60 seconds for changes to apply
+COMMAND: aws iam attach-user-policy --user-name YOUR_USER --policy-arn arn:aws:iam::aws:policy/POLICY_NAME
+PREVENTION: Always use least privilege principle. Never use root credentials.
+
+ERROR: InvalidClientTokenId
+CAUSE: AWS Access Key is invalid or expired
+FIX:
+Step 1: Go to AWS Console → IAM → Security credentials
+Step 2: Delete the old access key
+Step 3: Create a new access key
+Step 4: Run: aws configure
+Step 5: Enter new Access Key ID and Secret Access Key
+COMMAND: aws configure
+PREVENTION: Rotate access keys every 90 days.
+
+ERROR: RequestExpired
+CAUSE: System clock is out of sync
+FIX:
+Step 1: Check your system time
+Step 2: Sync your clock with NTP
+Step 3: On Linux: sudo ntpdate -u pool.ntp.org
+Step 4: On Windows: w32tm /resync
+Step 5: Retry your AWS command
+PREVENTION: Always keep system time synchronized.
+
+ERROR: ThrottlingException - Rate exceeded
+CAUSE: Too many API requests in a short time
+FIX:
+Step 1: Implement exponential backoff in your code
+Step 2: Reduce the frequency of API calls
+Step 3: Request a limit increase from AWS Support
+Step 4: Use SQS to queue requests
+COMMAND: aws service-quotas request-service-quota-increase
+PREVENTION: Implement retry logic with exponential backoff.
+
+ERROR: NoSuchBucket
+CAUSE: S3 bucket does not exist or wrong region
+FIX:
+Step 1: Check bucket name spelling
+Step 2: Verify the correct region
+Step 3: List your buckets: aws s3 ls
+Step 4: Create bucket if missing: aws s3 mb s3://bucket-name
+COMMAND: aws s3 ls
+PREVENTION: Always verify bucket names and regions before operations.
+
+ERROR: InstanceLimitExceeded
+CAUSE: EC2 instance limit reached in region
+FIX:
+Step 1: Check current limits: aws ec2 describe-account-attributes
+Step 2: Request limit increase in AWS Console
+Step 3: Go to Service Quotas → EC2 → Request increase
+Step 4: Wait 1-3 business days for approval
+PREVENTION: Monitor instance usage and request increases proactively.
+
+------------------------------------------------------------
+AZURE COMMON ERRORS
+------------------------------------------------------------
+
+ERROR: AuthorizationFailed
+CAUSE: User lacks required role assignment
+FIX:
+Step 1: Go to Azure Portal → Subscriptions
+Step 2: Click Access control (IAM)
+Step 3: Click Add → Add role assignment
+Step 4: Select the required role
+Step 5: Select the user and save
+COMMAND: az role assignment create --assignee USER_EMAIL --role "Contributor" --scope /subscriptions/SUBSCRIPTION_ID
+PREVENTION: Use Azure RBAC and assign minimum required roles.
+
+ERROR: ResourceNotFound
+CAUSE: Resource has been deleted or wrong resource group
+FIX:
+Step 1: Check the resource group name
+Step 2: Run: az resource list --resource-group YOUR_RG
+Step 3: Verify resource still exists
+Step 4: Check if resource was deleted in Activity Log
+COMMAND: az resource list --resource-group YOUR_RG
+PREVENTION: Tag all resources and document resource group structure.
+
+ERROR: QuotaExceeded
+CAUSE: Azure subscription quota limit reached
+FIX:
+Step 1: Go to Azure Portal → Subscriptions → Usage + quotas
+Step 2: Find the exceeded quota
+Step 3: Click Request Increase
+Step 4: Fill in the justification form
+Step 5: Submit and wait 1-3 business days
+COMMAND: az vm list-usage --location eastus
+PREVENTION: Monitor quota usage regularly and request increases early.
+
+ERROR: The subscription is not registered to use namespace
+CAUSE: Resource provider not registered
+FIX:
+Step 1: Go to Azure Portal → Subscriptions
+Step 2: Click Resource providers
+Step 3: Search for the namespace (e.g., Microsoft.Compute)
+Step 4: Click Register
+Step 5: Wait 2-5 minutes
+COMMAND: az provider register --namespace Microsoft.Compute
+PREVENTION: Register all required providers when setting up new subscriptions.
+
+ERROR: StorageAccountAlreadyExists
+CAUSE: Storage account name already taken globally
+FIX:
+Step 1: Choose a more unique name
+Step 2: Add numbers or your company name
+Step 3: Check availability: az storage account check-name --name YOUR_NAME
+Step 4: Create with new name
+COMMAND: az storage account check-name --name YOUR_STORAGE_NAME
+PREVENTION: Use naming conventions that include unique identifiers.
+
+------------------------------------------------------------
+GCP COMMON ERRORS
+------------------------------------------------------------
+
+ERROR: PERMISSION_DENIED
+CAUSE: Service account or user lacks required IAM role
+FIX:
+Step 1: Go to GCP Console → IAM & Admin → IAM
+Step 2: Find the user or service account
+Step 3: Click Edit (pencil icon)
+Step 4: Add the required role
+Step 5: Click Save
+COMMAND: gcloud projects add-iam-policy-binding PROJECT_ID --member="user:EMAIL" --role="roles/ROLE_NAME"
+PREVENTION: Follow principle of least privilege for all IAM assignments.
+
+ERROR: RESOURCE_EXHAUSTED - Quota exceeded
+CAUSE: GCP quota limit reached
+FIX:
+Step 1: Go to GCP Console → IAM & Admin → Quotas
+Step 2: Filter by exceeded quota
+Step 3: Select the quota and click Edit Quotas
+Step 4: Request the new limit
+Step 5: Submit with justification
+COMMAND: gcloud compute project-info describe --project YOUR_PROJECT
+PREVENTION: Set up quota alerts and monitor regularly.
+
+ERROR: BILLING_DISABLED
+CAUSE: Billing not enabled on project
+FIX:
+Step 1: Go to GCP Console → Billing
+Step 2: Link a billing account to your project
+Step 3: Go to project settings and enable billing
+Step 4: Retry your operation
+COMMAND: gcloud beta billing projects link PROJECT_ID --billing-account=BILLING_ACCOUNT_ID
+PREVENTION: Always link billing accounts when creating new projects.
+
+================================================================
+SECTION 2 - NETWORKING & CONNECTIVITY ISSUES
+================================================================
+
+------------------------------------------------------------
+AWS NETWORKING
+------------------------------------------------------------
+
+ISSUE: EC2 instance cannot connect to internet
+CAUSE: Missing Internet Gateway or route table misconfiguration
+FIX:
+Step 1: Check if VPC has Internet Gateway attached
+Step 2: Go to VPC → Internet Gateways → Attach to VPC
+Step 3: Check Route Table has route 0.0.0.0/0 → Internet Gateway
+Step 4: Check Security Group allows outbound traffic
+Step 5: Check NACL allows outbound traffic
+Step 6: Ensure EC2 has public IP or Elastic IP
+COMMAND: aws ec2 describe-route-tables --filters "Name=vpc-id,Values=YOUR_VPC_ID"
+PREVENTION: Use VPC Flow Logs to monitor traffic.
+
+ISSUE: Cannot SSH into EC2 instance
+CAUSE: Security group blocking port 22
+FIX:
+Step 1: Go to EC2 → Security Groups
+Step 2: Find the security group attached to instance
+Step 3: Edit inbound rules
+Step 4: Add rule: Type=SSH, Port=22, Source=Your IP
+Step 5: Save rules and retry SSH
+COMMAND: aws ec2 authorize-security-group-ingress --group-id SG_ID --protocol tcp --port 22 --cidr YOUR_IP/32
+PREVENTION: Use AWS Systems Manager Session Manager instead of SSH.
+
+ISSUE: RDS database connection timeout
+CAUSE: Security group or VPC configuration issue
+FIX:
+Step 1: Check RDS security group allows inbound on port 3306 (MySQL) or 5432 (PostgreSQL)
+Step 2: Verify RDS is in same VPC as application
+Step 3: Check subnet group configuration
+Step 4: Verify database is publicly accessible if connecting externally
+Step 5: Test connection: telnet RDS_ENDPOINT 3306
+PREVENTION: Always place RDS in private subnets and use VPC peering.
+
+------------------------------------------------------------
+AZURE NETWORKING
+------------------------------------------------------------
+
+ISSUE: VM cannot connect to internet
+CAUSE: NSG blocking outbound or missing public IP
+FIX:
+Step 1: Check NSG outbound rules allow traffic
+Step 2: Verify VM has public IP assigned
+Step 3: Check Azure Firewall if present
+Step 4: Verify route table is not blocking traffic
+Step 5: Test connectivity from VM
+COMMAND: az network nsg rule list --nsg-name YOUR_NSG --resource-group YOUR_RG
+PREVENTION: Use Network Watcher to diagnose connectivity issues.
+
+ISSUE: Cannot RDP into Azure VM
+CAUSE: NSG blocking port 3389
+FIX:
+Step 1: Go to Azure Portal → VM → Networking
+Step 2: Add inbound security rule
+Step 3: Port: 3389, Protocol: TCP, Action: Allow
+Step 4: Source: Your IP address
+Step 5: Priority: 100
+Step 6: Save and retry RDP
+COMMAND: az network nsg rule create --nsg-name YOUR_NSG --resource-group YOUR_RG --name Allow-RDP --priority 100 --port 3389 --access Allow
+PREVENTION: Use Azure Bastion instead of direct RDP access.
+
+------------------------------------------------------------
+GCP NETWORKING
+------------------------------------------------------------
+
+ISSUE: VM instance cannot connect to internet
+CAUSE: Missing external IP or firewall rule
+FIX:
+Step 1: Check if instance has external IP
+Step 2: If no external IP, set up Cloud NAT
+Step 3: Check firewall rules allow egress
+Step 4: Verify VPC routing table
+COMMAND: gcloud compute instances describe INSTANCE_NAME --zone=ZONE
+PREVENTION: Use Cloud NAT for instances that need internet without external IPs.
+
+ISSUE: Cannot SSH into GCP VM
+CAUSE: Firewall rule blocking port 22
+FIX:
+Step 1: Go to VPC Network → Firewall
+Step 2: Create firewall rule allowing port 22
+Step 3: Target: specific VM tags
+Step 4: Source: your IP range
+Step 5: Use gcloud SSH instead for easier access
+COMMAND: gcloud compute ssh INSTANCE_NAME --zone=ZONE
+PREVENTION: Use IAP (Identity-Aware Proxy) for SSH instead of opening port 22.
+
+================================================================
+SECTION 3 - STORAGE PROBLEMS
+================================================================
+
+------------------------------------------------------------
+AWS S3 STORAGE
+------------------------------------------------------------
+
+ISSUE: S3 upload failing - Access Denied
+CAUSE: Missing S3 write permissions
+FIX:
+Step 1: Check IAM policy includes s3:PutObject permission
+Step 2: Check S3 bucket policy is not blocking
+Step 3: Check if bucket has Public Access Block enabled
+Step 4: Verify correct bucket name and region
+COMMAND: aws s3 cp local-file.txt s3://bucket-name/
+Policy needed: {"Effect":"Allow","Action":["s3:PutObject"],"Resource":"arn:aws:s3:::bucket-name/*"}
+PREVENTION: Use IAM roles instead of user credentials for S3 access.
+
+ISSUE: S3 objects not accessible publicly
+CAUSE: Public access settings blocking
+FIX:
+Step 1: Go to S3 bucket → Permissions
+Step 2: Edit Block Public Access settings
+Step 3: Uncheck the relevant settings
+Step 4: Edit bucket policy to allow public read
+Step 5: Check individual object permissions
+COMMAND: aws s3api put-bucket-policy --bucket BUCKET_NAME --policy file://policy.json
+PREVENTION: Use CloudFront instead of making S3 buckets public.
+
+ISSUE: S3 data transfer costs too high
+CAUSE: Frequent cross-region data transfers
+FIX:
+Step 1: Identify transfer patterns using Cost Explorer
+Step 2: Move data to same region as consumers
+Step 3: Use S3 Transfer Acceleration for long-distance transfers
+Step 4: Implement CloudFront for frequently accessed content
+Step 5: Use VPC Endpoints to avoid data transfer charges
+COMMAND: aws s3api put-bucket-accelerate-configuration --bucket BUCKET_NAME --accelerate-configuration Status=Enabled
+PREVENTION: Keep data and compute in same region.
+
+------------------------------------------------------------
+AZURE STORAGE
+------------------------------------------------------------
+
+ISSUE: Azure Blob upload failing
+CAUSE: Storage account firewall blocking access
+FIX:
+Step 1: Go to Storage Account → Networking
+Step 2: Add your IP to allowed list
+Step 3: Or set to "All networks" for testing
+Step 4: Check SAS token has not expired
+Step 5: Verify container permissions
+COMMAND: az storage blob upload --account-name ACCOUNT --container-name CONTAINER --name BLOB_NAME --file LOCAL_FILE
+PREVENTION: Use managed identities instead of SAS tokens where possible.
+
+ISSUE: Azure Disk running out of space
+CAUSE: Disk not sized appropriately
+FIX:
+Step 1: Stop the VM
+Step 2: Go to Disks → Select disk
+Step 3: Click Size + performance
+Step 4: Increase disk size
+Step 5: Start VM and extend partition in OS
+COMMAND: az disk update --resource-group YOUR_RG --name DISK_NAME --size-gb NEW_SIZE
+PREVENTION: Monitor disk usage and set up alerts at 80% capacity.
+
+------------------------------------------------------------
+GCP STORAGE
+------------------------------------------------------------
+
+ISSUE: Cloud Storage access denied
+CAUSE: Missing IAM permissions on bucket
+FIX:
+Step 1: Go to GCP Console → Cloud Storage
+Step 2: Click on bucket → Permissions
+Step 3: Add principal (user or service account)
+Step 4: Assign Storage Object Viewer or Storage Admin role
+Step 5: Save changes
+COMMAND: gsutil iam ch user:EMAIL:objectViewer gs://BUCKET_NAME
+PREVENTION: Use service accounts with minimal permissions for application access.
+
+ISSUE: GCP Persistent Disk full
+CAUSE: Disk capacity exceeded
+FIX:
+Step 1: Stop the VM instance
+Step 2: Go to Compute Engine → Disks
+Step 3: Select the disk and click Edit
+Step 4: Increase size
+Step 5: Start VM and resize filesystem
+COMMAND: gcloud compute disks resize DISK_NAME --size=NEW_SIZE_GB --zone=ZONE
+PREVENTION: Set up disk usage monitoring and alerts.
+
+================================================================
+SECTION 4 - SECURITY & IAM ISSUES
+================================================================
+
+------------------------------------------------------------
+AWS SECURITY & IAM
+------------------------------------------------------------
+
+ISSUE: Root account being used for daily tasks
+RISK: Critical security risk
+FIX:
+Step 1: Create IAM admin user immediately
+Step 2: Enable MFA on root account
+Step 3: Lock away root credentials
+Step 4: Use IAM user for all daily tasks
+Step 5: Never create access keys for root
+COMMAND: aws iam create-user --user-name admin-user
+BEST PRACTICE: Root account should only be used for account-level tasks like billing.
+
+ISSUE: IAM access keys exposed in code
+RISK: Critical - immediate action required
+FIX:
+Step 1: Immediately deactivate the exposed key
+Step 2: Go to IAM → Users → Security credentials
+Step 3: Deactivate then delete the key
+Step 4: Create new access key
+Step 5: Remove key from code and use environment variables
+Step 6: Check CloudTrail for unauthorized usage
+COMMAND: aws iam deactivate-mfa-device --user-name USER --serial-number MFA_SERIAL
+PREVENTION: Use IAM roles instead of access keys. Never commit keys to code.
+
+ISSUE: S3 bucket publicly exposed accidentally
+RISK: Data breach risk
+FIX:
+Step 1: Go to S3 → Bucket → Permissions
+Step 2: Enable Block all public access
+Step 3: Review and remove public bucket policies
+Step 4: Review individual object ACLs
+Step 5: Enable S3 Access Analyzer
+Step 6: Check AWS Trusted Advisor for public buckets
+COMMAND: aws s3api put-public-access-block --bucket BUCKET_NAME --public-access-block-configuration "BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true"
+PREVENTION: Enable S3 Block Public Access at account level.
+
+ISSUE: CloudTrail not enabled
+RISK: No audit trail for security incidents
+FIX:
+Step 1: Go to CloudTrail → Create trail
+Step 2: Apply to all regions
+Step 3: Enable S3 data events
+Step 4: Enable Lambda data events
+Step 5: Enable log file integrity validation
+COMMAND: aws cloudtrail create-trail --name my-trail --s3-bucket-name my-bucket --is-multi-region-trail
+PREVENTION: Always enable CloudTrail in all regions from day one.
+
+------------------------------------------------------------
+AZURE SECURITY & IAM
+------------------------------------------------------------
+
+ISSUE: Too many users with Owner role
+RISK: Privilege escalation risk
+FIX:
+Step 1: Go to Subscriptions → Access Control (IAM)
+Step 2: Review all Owner role assignments
+Step 3: Remove unnecessary Owner assignments
+Step 4: Replace with Contributor or Reader where appropriate
+Step 5: Enable Privileged Identity Management (PIM)
+COMMAND: az role assignment list --role Owner --scope /subscriptions/SUBSCRIPTION_ID
+PREVENTION: Use PIM for just-in-time privileged access.
+
+ISSUE: Azure Key Vault access misconfigured
+CAUSE: Wrong access policies
+FIX:
+Step 1: Go to Key Vault → Access policies
+Step 2: Add access policy for the application
+Step 3: Select required permissions (Get, List etc)
+Step 4: Select the service principal
+Step 5: Save changes
+COMMAND: az keyvault set-policy --name KEY_VAULT_NAME --upn USER_EMAIL --secret-permissions get list
+PREVENTION: Use managed identities to access Key Vault without credentials.
+
+------------------------------------------------------------
+GCP SECURITY & IAM
+------------------------------------------------------------
+
+ISSUE: Service account has Editor role on project
+RISK: Over-privileged service account
+FIX:
+Step 1: Go to IAM & Admin → Service Accounts
+Step 2: Identify service accounts with Editor/Owner role
+Step 3: Create new service account with minimal permissions
+Step 4: Update application to use new service account
+Step 5: Delete or disable old over-privileged account
+COMMAND: gcloud iam service-accounts create NAME --display-name="Display Name"
+PREVENTION: Always create service accounts with specific roles, never Editor or Owner.
+
+ISSUE: Service account key not rotated
+RISK: Security risk if key compromised
+FIX:
+Step 1: Go to IAM → Service Accounts
+Step 2: Select service account → Keys
+Step 3: Add new key
+Step 4: Update application with new key
+Step 5: Delete old key
+COMMAND: gcloud iam service-accounts keys create KEY_FILE --iam-account=SA_EMAIL
+PREVENTION: Rotate service account keys every 90 days. Prefer Workload Identity over keys.
+
+================================================================
+SECTION 5 - COST & BILLING PROBLEMS
+================================================================
+
+------------------------------------------------------------
+AWS COST ISSUES
+------------------------------------------------------------
+
+ISSUE: Unexpected high AWS bill
+CAUSE: Forgotten resources or misconfigured services
+FIX:
+Step 1: Go to AWS Cost Explorer → View costs by service
+Step 2: Identify top cost drivers
+Step 3: Go to AWS Trusted Advisor → Cost Optimization
+Step 4: Check for idle EC2 instances
+Step 5: Check for unattached EBS volumes
+Step 6: Check for old snapshots
+Step 7: Check for unused Elastic IPs
+COMMAND: aws ce get-cost-and-usage --time-period Start=2024-01-01,End=2024-01-31 --granularity MONTHLY --metrics BlendedCost
+PREVENTION: Set up billing alerts and use AWS Budgets.
+
+ISSUE: EC2 costs too high
+CAUSE: Wrong instance type or always-on instances
+FIX:
+Step 1: Analyze usage patterns in CloudWatch
+Step 2: Right-size instances based on actual usage
+Step 3: Use Reserved Instances for steady workloads
+Step 4: Use Spot Instances for flexible workloads
+Step 5: Schedule non-production instances to stop at night
+COMMAND: aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId,InstanceType,State.Name]'
+SAVINGS: Reserved Instances save up to 72%. Spot Instances save up to 90%.
+
+ISSUE: Data transfer costs high
+CAUSE: Cross-region or internet data transfer
+FIX:
+Step 1: Use AWS Cost Explorer to identify transfer costs
+Step 2: Keep data and compute in same region
+Step 3: Use VPC Endpoints to avoid internet transfer costs
+Step 4: Use CloudFront to reduce origin data transfer
+Step 5: Compress data before transfer
+PREVENTION: Design architecture to minimize cross-region data movement.
+
+ISSUE: RDS costs too high
+CAUSE: Oversized database or Multi-AZ not needed
+FIX:
+Step 1: Check RDS CPU and memory utilization in CloudWatch
+Step 2: Right-size if utilization below 30%
+Step 3: Use Aurora Serverless for variable workloads
+Step 4: Disable Multi-AZ for non-production environments
+Step 5: Use Reserved Instances for production databases
+COMMAND: aws rds describe-db-instances --query 'DBInstances[*].[DBInstanceIdentifier,DBInstanceClass,MultiAZ]'
+SAVINGS: Reserved RDS can save up to 69%.
+
+------------------------------------------------------------
+AZURE COST ISSUES
+------------------------------------------------------------
+
+ISSUE: Unexpected high Azure bill
+CAUSE: Unmanaged resources or wrong pricing tier
+FIX:
+Step 1: Go to Azure Portal → Cost Management + Billing
+Step 2: View cost by resource
+Step 3: Use Azure Advisor → Cost recommendations
+Step 4: Check for unused resources
+Step 5: Set up budgets and alerts
+COMMAND: az consumption usage list --start-date 2024-01-01 --end-date 2024-01-31
+PREVENTION: Set up Azure Budget alerts immediately when creating subscription.
+
+ISSUE: Azure VM costs too high
+CAUSE: VMs running 24/7 without need
+FIX:
+Step 1: Enable Azure Advisor cost recommendations
+Step 2: Right-size underutilized VMs
+Step 3: Use Reserved VM Instances for 1 or 3 years
+Step 4: Use Azure Hybrid Benefit if you have Windows licenses
+Step 5: Auto-shutdown non-production VMs
+COMMAND: az vm auto-shutdown -g RESOURCE_GROUP -n VM_NAME --time 1900
+SAVINGS: Reserved Instances save up to 72%. Hybrid Benefit saves up to 40%.
+
+ISSUE: Storage costs growing too fast
+CAUSE: No lifecycle management policies
+FIX:
+Step 1: Go to Storage Account → Lifecycle management
+Step 2: Add rule to move old data to Cool storage
+Step 3: Add rule to move very old data to Archive
+Step 4: Set up automatic deletion for expired data
+Step 5: Review and delete unused storage accounts
+PREVENTION: Implement lifecycle policies from day one.
+
+------------------------------------------------------------
+GCP COST ISSUES
+------------------------------------------------------------
+
+ISSUE: Unexpected high GCP bill
+CAUSE: Uncontrolled resource usage
+FIX:
+Step 1: Go to GCP Console → Billing → Reports
+Step 2: View costs by service and project
+Step 3: Check Recommender for cost savings
+Step 4: Look for idle resources
+Step 5: Set up billing alerts
+COMMAND: gcloud billing budgets list --billing-account=BILLING_ACCOUNT_ID
+PREVENTION: Set up budget alerts on every GCP project from day one.
+
+ISSUE: Compute Engine costs too high
+CAUSE: Wrong machine type or always-on instances
+FIX:
+Step 1: Use GCP Recommender for right-sizing
+Step 2: Switch to Committed Use Discounts for stable workloads
+Step 3: Use Preemptible VMs for batch workloads
+Step 4: Take advantage of Sustained Use Discounts (automatic)
+Step 5: Schedule instances to stop when not needed
+COMMAND: gcloud compute instances stop INSTANCE_NAME --zone=ZONE
+SAVINGS: Committed Use Discounts save up to 57%. Preemptible VMs save up to 91%.
+
+ISSUE: BigQuery costs out of control
+CAUSE: Inefficient queries scanning too much data
+FIX:
+Step 1: Always preview query cost before running
+Step 2: Use SELECT specific columns not SELECT *
+Step 3: Partition tables by date
+Step 4: Cluster tables by frequently filtered columns
+Step 5: Use query cost controls and set maximum bytes billed
+COMMAND: bq query --maximum_bytes_billed=1000000000 'YOUR_QUERY'
+PREVENTION: Always estimate query cost using the BQ cost estimator before running.
+
+================================================================
+SECTION 6 - QUICK REFERENCE - TOP 10 BEST PRACTICES
+================================================================
+
+1. NEVER use root/admin accounts for daily tasks
+2. ALWAYS enable MFA on all accounts
+3. ALWAYS set up billing alerts from day one
+4. NEVER hardcode credentials in code
+5. ALWAYS use least privilege for IAM
+6. ALWAYS enable audit logging (CloudTrail/Activity Log/Cloud Audit Logs)
+7. NEVER make storage buckets publicly accessible unless necessary
+8. ALWAYS encrypt data at rest and in transit
+9. ALWAYS tag/label all resources for cost tracking
+10. NEVER ignore security alerts and recommendations
+
+================================================================
+OFFICIAL DOCUMENTATION LINKS
+================================================================
+
+AWS:
+- Main Docs: https://docs.aws.amazon.com
+- Troubleshooting: https://aws.amazon.com/premiumsupport/knowledge-center
+- Pricing Calculator: https://calculator.aws/pricing/2/home
+- Security Best Practices: https://aws.amazon.com/architecture/security-identity-compliance
+
+AZURE:
+- Main Docs: https://learn.microsoft.com/azure
+- Troubleshooting: https://learn.microsoft.com/azure/azure-portal/supportability
+- Pricing Calculator: https://azure.microsoft.com/pricing/calculator
+- Security Best Practices: https://learn.microsoft.com/azure/security
+
+GCP:
+- Main Docs: https://cloud.google.com/docs
+- Troubleshooting: https://cloud.google.com/support
+- Pricing Calculator: https://cloud.google.com/products/calculator
+- Security Best Practices: https://cloud.google.com/security/best-practices
+
+================================================================
+END OF CLOUDHELPER AI TROUBLESHOOTING DOCUMENTATION
+Built by Anirudh Jagannadh
+================================================================
