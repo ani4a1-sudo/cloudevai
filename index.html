@@ -292,6 +292,47 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 .cta-btn{display:inline-block;padding:10px 24px;background:var(--text);color:var(--accent-fg);border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity 0.2s;}
 .cta-btn:hover{opacity:0.85;}
 
+.sec-card{transition:box-shadow 0.15s;}
+.sec-card:hover{box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.sec-body strong{font-weight:600;}
+
+/* UPLOAD BUTTON */
+.upload-btn{
+  display:flex;align-items:center;gap:5px;
+  padding:5px 10px;border-radius:7px;
+  border:1px solid var(--border);background:var(--surface2);
+  cursor:pointer;font-size:11px;font-weight:500;
+  color:var(--text2);transition:all 0.15s;
+  font-family:'DM Sans',sans-serif;
+}
+.upload-btn:hover{border-color:var(--border2);color:var(--text);background:var(--surface);}
+.upload-btn-chat{
+  display:flex;align-items:center;justify-content:center;
+  width:30px;height:30px;border-radius:7px;
+  border:1px solid var(--border);background:var(--surface2);
+  cursor:pointer;color:var(--text2);transition:all 0.15s;
+  flex-shrink:0;
+}
+.upload-btn-chat:hover{border-color:var(--border2);color:var(--text);}
+
+/* OPTION 2 — NOTION STYLE SECTIONS */
+.n2-response{display:flex;flex-direction:column;gap:0;}
+.n2-section{padding:12px 0;border-bottom:1px solid var(--border);}
+.n2-section:last-child{border-bottom:none;padding-bottom:0;}
+.n2-label{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;font-family:'DM Mono',monospace;}
+.n2-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:4px;}
+.n2-body{font-size:13px;color:var(--text2);line-height:1.7;}
+.n2-steps{display:flex;flex-direction:column;gap:6px;margin-top:2px;}
+.n2-step{display:flex;gap:10px;align-items:baseline;}
+.n2-num{font-size:11px;font-weight:600;color:var(--text3);min-width:22px;font-family:'DM Mono',monospace;}
+.n2-step-text{font-size:13px;color:var(--text);}
+.n2-step-desc{font-size:11.5px;color:var(--text2);margin-top:1px;line-height:1.5;}
+.n2-bullets{display:flex;flex-direction:column;gap:4px;margin-top:2px;}
+.n2-bullet{display:flex;gap:8px;font-size:13px;color:var(--text);}
+.n2-dash{color:var(--text3);flex-shrink:0;}
+/* FILE BADGE */
+.file-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--text2);margin-bottom:8px;}
+
 @media(max-width:640px){.welcome h1{font-size:36px;}.hero-input-wrap{border-radius:12px;}.messages{padding:20px 16px;}}
 </style>
 </head>
@@ -337,9 +378,19 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
         <p class="welcome-sub">Ask anything about AWS, Azure, GCP, Terraform, Kubernetes, Linux or CI/CD — get production-ready answers instantly.</p>
 
         <div class="hero-input-wrap" id="heroInputWrap">
-          <textarea class="hero-textarea" id="heroInput" placeholder="Ask me anything about cloud infrastructure..." rows="1"
+          <div id="heroFilePreview" style="display:none;padding:8px 10px;background:var(--surface2);border-radius:8px;margin-bottom:10px;border:1px solid var(--border);display:flex;align-items:center;gap:8px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span id="heroFileName" style="font-size:12px;color:var(--text2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+            <button onclick="clearFile('hero')" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:14px;padding:0 2px;">✕</button>
+          </div>
+          <textarea class="hero-textarea" id="heroInput" placeholder="Ask me anything, or upload a PDF to analyze..." rows="1"
             onkeydown="handleHeroKey(event)" oninput="autoResize(this)"></textarea>
           <div class="hero-input-footer">
+            <label for="heroFileInput" class="upload-btn" title="Upload PDF or Image">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+              Attach
+            </label>
+            <input type="file" id="heroFileInput" accept=".pdf,.txt,.log,image/png,image/jpeg,image/jpg,image/webp,image/gif" style="display:none;" onchange="handleFile(event,'hero')">
             <span class="hero-hint">↵ Enter to send</span>
             <button class="hero-send" id="heroSendBtn" onclick="sendFromHero()">
               <svg viewBox="0 0 24 24"><path d="M2 21L23 12 2 3v7l15 2-15 2z"/></svg>
@@ -362,8 +413,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
     <div class="chat-input-area" id="chatInputArea" style="display:none;">
       <div class="chat-input-inner">
         <div class="chat-input-box">
+          <div id="chatFilePreview" style="display:none;padding:7px 10px;background:var(--surface2);border-radius:8px;margin-bottom:8px;border:1px solid var(--border);display:flex;align-items:center;gap:8px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span id="chatFileName" style="font-size:12px;color:var(--text2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+            <button onclick="clearFile('chat')" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:13px;padding:0 2px;">✕</button>
+          </div>
           <div class="chat-input-row">
-            <textarea class="chat-textarea" id="chatInput" placeholder="Ask about cloud, DevOps, Terraform, Kubernetes..." rows="1"
+            <label for="chatFileInput" class="upload-btn-chat" title="Upload PDF or Image">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            </label>
+            <input type="file" id="chatFileInput" accept=".pdf,.txt,.log,image/png,image/jpeg,image/jpg,image/webp,image/gif" style="display:none;" onchange="handleFile(event,'chat')">
+            <textarea class="chat-textarea" id="chatInput" placeholder="Ask about cloud, or upload a PDF to analyze..." rows="1"
               onkeydown="handleChatKey(event)" oninput="autoResize(this)"></textarea>
             <button class="chat-send" id="chatSendBtn" onclick="sendFromChat()">
               <svg viewBox="0 0 24 24"><path d="M2 21L23 12 2 3v7l15 2-15 2z"/></svg>
@@ -748,21 +808,110 @@ function extractDiagram(text){
   return{code:null,text};
 }
 
-function formatMsg(text){
-  text=text.replace(/```(\w*)\n?([\s\S]*?)```/g,(_,lang,code)=>{
+// SECTION CONFIGS — maps emoji headers to visual styles
+// FILE UPLOAD
+let uploadedFile=null;
+
+function handleFile(e,src){
+  const file=e.target.files[0];
+  if(!file)return;
+  if(file.size>10*1024*1024){alert('File too large. Maximum 10MB.');return;}
+  const isImage=file.type.startsWith('image/');
+  const isPdf=file.type==='application/pdf';
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    uploadedFile={name:file.name,type:file.type,data:ev.target.result,isPdf,isImage};
+    const prev=document.getElementById(src==='hero'?'heroFilePreview':'chatFilePreview');
+    const nm=document.getElementById(src==='hero'?'heroFileName':'chatFileName');
+    if(prev)prev.style.display='flex';
+    if(nm)nm.textContent=(isImage?'🖼️ ':'📄 ')+file.name;
+  };
+  reader.readAsDataURL(file);
+  e.target.value='';
+}
+
+function clearFile(src){
+  uploadedFile=null;
+  const ids=src==='hero'?['heroFilePreview','heroFileName','heroFileInput']:['chatFilePreview','chatFileName','chatFileInput'];
+  ids.forEach(id=>{const el=document.getElementById(id);if(el){el.style.display=el.tagName==='INPUT'?'none':'none';if(el.tagName!=='INPUT')el.textContent||el.style;el.value='';}});
+  const prev=document.getElementById(ids[0]);if(prev)prev.style.display='none';
+}
+
+// Option 2 — Notion style formatter
+function parseSections(text){
+  const lines=text.split('\n');
+  const sections=[];let cur=null;
+  const hRx=/^([\u{1F300}-\u{1FAFF}]|\uD83D[\uDC00-\uDFFF]|\uD83C[\uDF00-\uDFFF]|[\u2600-\u27BF]|🔍|🏗️|🎯|🚨|🌳|💡|✅|💻|🔒|💰|📅|📚|⚠️)\s+([A-Z][A-Z\s\-:]{3,})(?::)?\s*$/u;
+  for(const line of lines){
+    const m=line.match(hRx);
+    if(m){if(cur)sections.push(cur);cur={emoji:m[1],title:m[2].trim().replace(/:$/,''),body:[]};}
+    else{if(cur)cur.body.push(line);else{if(!sections.length||sections[sections.length-1].emoji)sections.push({emoji:null,title:null,body:[]});sections[sections.length-1].body.push(line);}}
+  }
+  if(cur)sections.push(cur);
+  return sections;
+}
+
+function formatInline(t){
+  t=t.replace(/`([^`]+)`/g,'<span class="ic">$1</span>');
+  t=t.replace(/\*\*([^*]+)\*\*/g,'<strong style="font-weight:500;color:var(--text);">$1</strong>');
+  return t;
+}
+
+function renderBody(lines){
+  const parts=[];let stepN=0;
+  const allText=lines.join('\n');
+  if(allText.match(/^IF\s+/im))return`<div style="font-family:\'DM Mono\',monospace;font-size:12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;line-height:1.9;white-space:pre-wrap;color:var(--text);">${allText.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`;
+  for(let i=0;i<lines.length;i++){
+    const ln=lines[i];
+    const sM=ln.match(/^(\d+)\.\s+(.+)/);
+    const bM=ln.match(/^[-•]\s+(.+)/);
+    if(sM){
+      stepN++;
+      const nxt=lines[i+1]||'';let desc='';
+      if(nxt&&(nxt.match(/^\s{2,}/)||(!nxt.match(/^\d+\.\s/)&&!nxt.match(/^[-•]\s/)&&nxt.trim()&&!nxt.match(/^[🔍🎯🚨🌳💡✅💻🔒💰📅📚⚠️]\s+[A-Z]/)))){desc=`<div class="n2-step-desc">${formatInline(nxt.trim())}</div>`;i++;}
+      parts.push(`<div class="n2-step"><span class="n2-num">0${stepN}</span><div><div class="n2-step-text">${formatInline(sM[2])}</div>${desc}</div></div>`);
+    }else if(bM){parts.push(`<div class="n2-bullet"><span class="n2-dash">—</span><span>${formatInline(bM[1])}</span></div>`);}
+    else if(ln.trim()){parts.push(`<div class="n2-body" style="margin:3px 0;">${formatInline(ln)}</div>`);}
+  }
+  return parts.join('');
+}
+
+function formatMsg(rawText){
+  const codeBlocks=[];
+  const mkCodeBlock=(lang,code)=>{
     cpN++;const bid='cp-'+cpN;
     const labels={aws:'AWS CLI',az:'Azure CLI',gcloud:'GCP CLI',terraform:'Terraform',kubectl:'Kubectl',docker:'Docker',bash:'Bash',shell:'Shell',powershell:'PowerShell',python:'Python SDK',yaml:'YAML',json:'JSON',hcl:'HCL'};
-    const label=labels[lang.toLowerCase()]||(lang?lang.toUpperCase():'Command');
+    const label=labels[(lang||'').toLowerCase()]||(lang?lang.toUpperCase():'Command');
     const esc=code.replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    // Store code safely in data attribute to prevent HTML injection
-    const safeCode=code.trim();
-    window['__code_'+bid]=safeCode;
-    return `<div class="code-block"><div class="code-head"><span class="code-lang">${label}</span><button class="cp-btn" id="${bid}" onclick="copyCode('${bid}')"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="cp-tooltip" id="tt-${bid}">Copy</span></button></div><pre>${esc.trim()}</pre></div>`;
+    window['__code_'+bid]=code.trim();
+    return`<div class="code-block"><div class="code-head"><span class="code-lang">${label}</span><button class="cp-btn" id="${bid}" onclick="copyCode(\'${bid}\')"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="cp-tooltip" id="tt-${bid}">Copy</span></button></div><pre>${esc.trim()}</pre></div>`;
+  };
+  let text=rawText.replace(/\`\`\`(\w*)\n?([\s\S]*?)\`\`\`/g,(_,lang,code)=>{
+    const ph='__C'+codeBlocks.length+'__';
+    codeBlocks.push(mkCodeBlock(lang,code));return ph;
   });
-  text=text.replace(/`([^`]+)`/g,'<span class="ic">$1</span>');
-  text=text.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
-  text=text.replace(/\n/g,'<br>');
-  return text;
+  const sections=parseSections(text);
+  const hasStructure=sections.some(s=>s.emoji);
+  if(!hasStructure){
+    let out=rawText.replace(/\`\`\`(\w*)\n?([\s\S]*?)\`\`\`/g,(_,l,c)=>mkCodeBlock(l,c));
+    out=out.replace(/`([^`]+)`/g,'<span class="ic">$1</span>');
+    out=out.replace(/\*\*([^*]+)\*\*/g,'<strong style="font-weight:500;">$1</strong>');
+    out=out.replace(/\n/g,'<br>');
+    return out;
+  }
+  let html='<div class="n2-response">';
+  for(const sec of sections){
+    if(!sec.emoji){
+      let body=sec.body.join('\n');
+      codeBlocks.forEach((b,i)=>{body=body.replace('__C'+i+'__',b);});
+      if(body.trim())html+=`<div class="n2-section"><div class="n2-body">${formatInline(body.replace(/\n/g,'<br>'))}</div></div>`;
+    }else{
+      let bodyLines=sec.body.slice();let bodyText=bodyLines.join('\n');
+      codeBlocks.forEach((b,i)=>{bodyText=bodyText.replace('__C'+i+'__',b);bodyLines=bodyText.split('\n');});
+      html+=`<div class="n2-section"><div class="n2-label">${sec.emoji} ${sec.title}</div>${renderBody(bodyLines)}</div>`;
+    }
+  }
+  return html+'</div>';
 }
 
 function copyCode(bid){
@@ -861,10 +1010,42 @@ async function sendMessage(text){
   const s1=document.getElementById('heroSendBtn');
   const s2=document.getElementById('chatSendBtn');
   if(s1)s1.disabled=true;if(s2)s2.disabled=true;
-  addMsg('user',text);
-  messages.push({role:'user',content:text});
+
+  // Build user message content
+  let userContent=text;
+  let apiContent=text;
+
+  if(uploadedFile){
+    const fname=uploadedFile.name;
+    const base64=uploadedFile.data.split(',')[1];
+    const mtype=uploadedFile.type;
+
+    if(uploadedFile.isImage){
+      userContent=`🖼️ ${fname}\n\n${text}`;
+      apiContent=[
+        {type:'image',source:{type:'base64',media_type:mtype,data:base64}},
+        {type:'text',text:text||'Analyze this screenshot. Identify any cloud infrastructure issues, errors, or areas for improvement.'}
+      ];
+    } else if(uploadedFile.isPdf){
+      userContent=`📄 ${fname}\n\n${text}`;
+      apiContent=[
+        {type:'document',source:{type:'base64',media_type:'application/pdf',data:base64}},
+        {type:'text',text:text||'Analyze this document and provide cloud architecture recommendations.'}
+      ];
+    } else {
+      // text/log file
+      const decoded=atob(base64);
+      userContent=`📄 ${fname}\n\n${text}`;
+      apiContent=`[File: ${fname}]\n\n${decoded}\n\n${text}`;
+    }
+    clearFile('hero');clearFile('chat');
+  }
+
+  addMsg('user',userContent);
+  messages.push({role:'user',content:apiContent});
   if(messages.length===1)saveChat(text);
   showTyping();
+
   try{
     const r=await fetch('/api/chat',{
       method:'POST',headers:{'Content-Type':'application/json'},
