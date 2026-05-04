@@ -3,233 +3,375 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CloudevAI — Cloud AI Assistant</title>
+<title>CloudevAI — Cloud Decisions at 2am</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;700&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#f7f7f5;--surface:#ffffff;--surface2:#f2f2f0;--border:#e8e8e4;--border2:#d8d8d4;
-  --text:#1a1a18;--text2:#6b6b65;--text3:#9b9b95;--accent:#1a1a18;--accent-fg:#ffffff;
-  --user-bubble:#1a1a18;--user-fg:#ffffff;--ai-bubble:#ffffff;--ai-border:#e8e8e4;
-  --code-bg:#1a1a18;--code-fg:#e8e8e4;--code-header:#141412;
-  --shadow:0 1px 3px rgba(0,0,0,0.06);
+  --bg:#fafaf8;--surface:#ffffff;--surface2:#f4f4f1;--border:#e8e8e2;--border2:#d4d4cc;
+  --text:#18181a;--text2:#6b6b6e;--text3:#a8a8ab;--accent:#18181a;--accent-fg:#ffffff;
+  --green:#16a34a;--red:#dc2626;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.05);
+  --shadow-md:0 4px 20px rgba(0,0,0,0.08);
+  --shadow-lg:0 20px 60px rgba(0,0,0,0.12);
 }
 [data-theme="dark"]{
-  --bg:#111110;--surface:#1c1c1a;--surface2:#242422;--border:#2e2e2c;--border2:#3a3a38;
-  --text:#f0f0ec;--text2:#8a8a84;--text3:#5a5a56;--accent:#f0f0ec;--accent-fg:#111110;
-  --user-bubble:#f0f0ec;--user-fg:#111110;--ai-bubble:#1c1c1a;--ai-border:#2e2e2c;
-  --code-bg:#0c0c0b;--code-fg:#c8c8c2;--code-header:#090908;
-  --shadow:0 1px 3px rgba(0,0,0,0.3);
+  --bg:#0f0f0f;--surface:#161616;--surface2:#1e1e1e;--border:#2a2a2a;--border2:#383838;
+  --text:#f0f0ec;--text2:#888884;--text3:#555552;--accent:#f0f0ec;--accent-fg:#0f0f0f;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.4);
+  --shadow-md:0 4px 20px rgba(0,0,0,0.5);
+  --shadow-lg:0 20px 60px rgba(0,0,0,0.6);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{height:100%;}
-body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;transition:background 0.3s,color 0.3s;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;transition:background 0.3s,color 0.3s;}
 
 /* HEADER */
-.header{height:52px;border-bottom:1px solid var(--border);background:var(--surface);display:flex;align-items:center;padding:0 20px;gap:14px;flex-shrink:0;}
-.logo{width:28px;height:28px;background:var(--text);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.logo svg{width:16px;height:16px;fill:var(--accent-fg);}
-.brand{font-family:'Geist Mono',monospace;font-size:14px;font-weight:600;color:var(--text);letter-spacing:-0.3px;}
+.header{
+  height:56px;border-bottom:1px solid var(--border);
+  background:var(--bg);display:flex;align-items:center;
+  padding:0 24px;gap:16px;flex-shrink:0;
+  position:relative;z-index:50;
+}
+.sidebar-toggle{
+  width:34px;height:34px;border-radius:8px;border:1px solid var(--border);
+  background:transparent;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;color:var(--text2);transition:all 0.2s;
+}
+.sidebar-toggle:hover{background:var(--surface2);color:var(--text);}
+.sidebar-toggle svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;}
+.brand{font-family:'DM Serif Display',serif;font-size:18px;color:var(--text);letter-spacing:-0.3px;}
+.brand-dot{color:var(--text3);}
 .header-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
-.about-btn{padding:5px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;font-size:12px;font-weight:500;color:var(--text2);font-family:'Geist',sans-serif;transition:all 0.2s;}
-.about-btn:hover{background:var(--border);color:var(--text);}
-.theme-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;}
-.theme-btn:hover{background:var(--border);}
+.about-btn{padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:transparent;cursor:pointer;font-size:13px;font-weight:500;color:var(--text2);font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+.about-btn:hover{background:var(--surface2);color:var(--text);border-color:var(--border2);}
+.theme-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:all 0.2s;}
+.theme-btn:hover{background:var(--surface2);}
 
 /* LAYOUT */
-.main{display:flex;flex:1;overflow:hidden;}
+.layout{display:flex;flex:1;overflow:hidden;position:relative;}
 
 /* SIDEBAR */
-.sidebar{width:248px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;}
-.sidebar-top{padding:14px 14px 10px;border-bottom:1px solid var(--border);}
-.new-btn{width:100%;padding:8px 12px;background:var(--accent);color:var(--accent-fg);border:none;border-radius:8px;font-family:'Geist',sans-serif;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:opacity 0.2s;}
+.sidebar{
+  width:260px;background:var(--bg);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;flex-shrink:0;
+  position:absolute;left:0;top:0;bottom:0;z-index:40;
+  transform:translateX(-100%);transition:transform 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+.sidebar.open{transform:translateX(0);}
+.sidebar-inner{display:flex;flex-direction:column;height:100%;padding:14px;}
+.new-btn{
+  width:100%;padding:10px 14px;background:var(--accent);color:var(--accent-fg);
+  border:none;border-radius:10px;font-family:'DM Sans',sans-serif;
+  font-size:13px;font-weight:500;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  transition:opacity 0.2s;margin-bottom:16px;
+}
 .new-btn:hover{opacity:0.85;}
-.new-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;}
-.sidebar-label{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:0.8px;text-transform:uppercase;padding:10px 14px 4px;}
-.history-list{flex:1;overflow-y:auto;padding:4px 8px 8px;}
-.history-empty{padding:20px 8px;text-align:center;font-size:12px;color:var(--text3);line-height:1.6;}
-.history-item{padding:9px 10px;border-radius:7px;cursor:pointer;margin-bottom:2px;border:1px solid transparent;position:relative;transition:background 0.15s;}
+.new-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.2;}
+.sidebar-label{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;padding:0 4px;}
+.history-list{flex:1;overflow-y:auto;}
+.history-empty{padding:20px 4px;text-align:center;font-size:12px;color:var(--text3);line-height:1.7;}
+.history-item{padding:9px 10px;border-radius:8px;cursor:pointer;margin-bottom:2px;border:1px solid transparent;position:relative;transition:background 0.15s;}
 .history-item:hover{background:var(--surface2);border-color:var(--border);}
 .history-item.active{background:var(--surface2);border-color:var(--border2);}
-.hi-title{font-size:12px;color:var(--text);font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:16px;}
-.hi-time{font-size:10px;color:var(--text3);margin-top:2px;font-family:'Geist Mono',monospace;}
-.hi-del{position:absolute;right:8px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:12px;opacity:0;cursor:pointer;padding:2px 4px;border-radius:4px;}
+.hi-title{font-size:12.5px;color:var(--text);font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:18px;}
+.hi-time{font-size:10px;color:var(--text3);margin-top:2px;font-family:'DM Mono',monospace;}
+.hi-del{position:absolute;right:8px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:11px;opacity:0;cursor:pointer;padding:2px 5px;border-radius:4px;}
 .history-item:hover .hi-del{opacity:1;}
-.hi-del:hover{color:#ef4444;}
+.hi-del:hover{color:var(--red);}
 
-/* CHAT */
+/* SIDEBAR OVERLAY */
+.sidebar-overlay{
+  position:absolute;inset:0;background:rgba(0,0,0,0.15);
+  z-index:30;opacity:0;pointer-events:none;transition:opacity 0.25s;
+  backdrop-filter:blur(2px);
+}
+.sidebar-overlay.show{opacity:1;pointer-events:all;}
+
+/* MAIN CHAT */
 .chat-area{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;}
-.messages{flex:1;padding:24px 28px;overflow-y:auto;display:flex;flex-direction:column;gap:20px;background:var(--bg);}
-.welcome{max-width:480px;margin:40px auto 0;display:flex;flex-direction:column;gap:24px;}
-.welcome-mark{width:40px;height:40px;background:var(--text);border-radius:10px;display:flex;align-items:center;justify-content:center;}
-.welcome-mark svg{width:22px;height:22px;fill:var(--accent-fg);}
-.welcome h2{font-size:22px;font-weight:600;color:var(--text);line-height:1.3;}
-.welcome-sub{font-size:14px;color:var(--text2);line-height:1.6;}
-.starter-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.starter{padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:border-color 0.15s,background 0.15s;text-align:left;}
-.starter:hover{border-color:var(--border2);background:var(--surface2);}
-.starter-icon{font-size:16px;margin-bottom:6px;}
-.starter-text{font-size:12px;color:var(--text2);line-height:1.4;}
+.messages{flex:1;overflow-y:auto;padding:40px 24px;}
+
+/* WELCOME — BASE44 STYLE */
+.welcome{
+  max-width:680px;margin:0 auto;
+  display:flex;flex-direction:column;
+  align-items:center;text-align:center;
+  padding-top:80px;
+}
+.welcome-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 14px;border-radius:20px;
+  border:1px solid var(--border);background:var(--surface);
+  font-size:11px;font-weight:500;color:var(--text2);
+  margin-bottom:28px;font-family:'DM Mono',monospace;
+  letter-spacing:0.3px;
+}
+.welcome-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;}
+.welcome h1{
+  font-family:'DM Serif Display',serif;
+  font-size:52px;color:var(--text);line-height:1.1;
+  letter-spacing:-1.5px;margin-bottom:16px;
+  max-width:560px;
+}
+.welcome h1 em{font-style:italic;color:var(--text3);}
+.welcome-sub{
+  font-size:16px;color:var(--text2);line-height:1.6;
+  max-width:420px;margin-bottom:40px;font-weight:400;
+}
+
+/* BIG INPUT BOX */
+.hero-input-wrap{
+  width:100%;max-width:600px;
+  background:var(--surface);border:1.5px solid var(--border2);
+  border-radius:16px;padding:16px 16px 12px;
+  box-shadow:var(--shadow-md);transition:border-color 0.2s,box-shadow 0.2s;
+  margin-bottom:24px;
+}
+.hero-input-wrap:focus-within{
+  border-color:var(--text);
+  box-shadow:var(--shadow-lg);
+}
+.hero-textarea{
+  width:100%;background:transparent;border:none;outline:none;
+  color:var(--text);font-family:'DM Sans',sans-serif;
+  font-size:15px;line-height:1.6;resize:none;
+  max-height:160px;min-height:24px;overflow-y:auto;
+}
+.hero-textarea::placeholder{color:var(--text3);}
+.hero-input-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;}
+.hero-hint{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;}
+.hero-send{
+  width:36px;height:36px;background:var(--accent);border:none;
+  border-radius:9px;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;transition:opacity 0.2s;
+}
+.hero-send:hover{opacity:0.8;}
+.hero-send:disabled{opacity:0.3;cursor:not-allowed;}
+.hero-send svg{width:15px;height:15px;fill:var(--accent-fg);}
+
+/* SUGGESTIONS */
+.suggestions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:560px;}
+.suggestion{
+  padding:8px 16px;border-radius:20px;border:1px solid var(--border);
+  background:var(--surface);cursor:pointer;font-size:12.5px;
+  color:var(--text2);transition:all 0.15s;font-family:'DM Sans',sans-serif;
+  font-weight:400;
+}
+.suggestion:hover{border-color:var(--border2);background:var(--surface2);color:var(--text);}
 
 /* MESSAGES */
-.msg{display:flex;gap:10px;animation:fadeUp 0.25s ease;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.msg-list{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:24px;}
+.msg{display:flex;gap:12px;animation:fadeUp 0.3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
 .msg.user{flex-direction:row-reverse;}
-.av{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;font-family:'Geist Mono',monospace;}
+.av{
+  width:30px;height:30px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:600;flex-shrink:0;
+  font-family:'DM Mono',monospace;
+}
 .av.ai-av{background:var(--text);color:var(--accent-fg);}
 .av.user-av{background:var(--surface2);border:1px solid var(--border2);color:var(--text2);}
-.bubble{max-width:76%;padding:11px 15px;border-radius:12px;font-size:13.5px;line-height:1.7;}
-.msg.ai .bubble{background:var(--ai-bubble);border:1px solid var(--ai-border);border-top-left-radius:3px;color:var(--text);box-shadow:var(--shadow);}
-.msg.user .bubble{background:var(--user-bubble);border-top-right-radius:3px;color:var(--user-fg);}
+.bubble{
+  max-width:78%;padding:12px 16px;border-radius:14px;
+  font-size:14px;line-height:1.75;
+}
+.msg.ai .bubble{
+  background:var(--surface);border:1px solid var(--border);
+  border-top-left-radius:4px;color:var(--text);box-shadow:var(--shadow-sm);
+}
+.msg.user .bubble{
+  background:var(--accent);border-top-right-radius:4px;color:var(--accent-fg);
+}
 .bubble strong{font-weight:600;}
 
 /* CODE BLOCKS */
-.code-block{position:relative;margin:10px 0;border-radius:9px;overflow:hidden;border:1px solid var(--border);}
-.code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--code-header);}
-.code-lang{font-family:'Geist Mono',monospace;font-size:10px;color:#6b6b65;text-transform:uppercase;letter-spacing:0.6px;}
+.code-block{position:relative;margin:12px 0;border-radius:10px;overflow:hidden;border:1px solid var(--border);}
+.code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;background:#111111;}
+.code-lang{font-family:'DM Mono',monospace;font-size:10px;color:#666;text-transform:uppercase;letter-spacing:0.8px;}
 .cp-btn{
   position:relative;display:flex;align-items:center;justify-content:center;
   width:30px;height:30px;border-radius:7px;
   background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);
-  color:#8a8a84;cursor:pointer;transition:all 0.15s;flex-shrink:0;
+  color:#888;cursor:pointer;transition:all 0.15s;flex-shrink:0;
 }
-.cp-btn:hover{background:rgba(255,255,255,0.14);color:#ffffff;border-color:rgba(255,255,255,0.22);}
+.cp-btn:hover{background:rgba(255,255,255,0.14);color:#fff;border-color:rgba(255,255,255,0.25);}
 .cp-btn.ok{background:rgba(34,197,94,0.15);border-color:rgba(34,197,94,0.35);color:#4ade80;}
 .cp-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;pointer-events:none;}
-.cp-tooltip{position:absolute;top:36px;right:0;background:#1a1a18;color:#fff;font-size:11px;font-weight:500;padding:5px 9px;border-radius:6px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.15s;font-family:'Geist',sans-serif;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.25);}
-.cp-btn:hover .cp-tooltip{opacity:1;}
-.cp-btn.ok .cp-tooltip{opacity:1;}
-.code-block pre{margin:0;padding:13px 14px;background:var(--code-bg);color:var(--code-fg);font-family:'Geist Mono',monospace;font-size:12px;white-space:pre-wrap;word-break:break-word;line-height:1.7;}
-.ic{background:var(--surface2);padding:1px 5px;border-radius:4px;font-family:'Geist Mono',monospace;font-size:12px;color:var(--text2);border:1px solid var(--border);}
+.cp-tooltip{position:absolute;top:36px;right:0;background:#111;color:#fff;font-size:11px;font-weight:500;padding:5px 9px;border-radius:6px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.15s;font-family:'DM Sans',sans-serif;z-index:100;}
+.cp-btn:hover .cp-tooltip,.cp-btn.ok .cp-tooltip{opacity:1;}
+.code-block pre{margin:0;padding:14px;background:#0a0a0a;color:#d4d4d4;font-family:'DM Mono',monospace;font-size:12.5px;white-space:pre-wrap;word-break:break-word;line-height:1.7;}
+.ic{background:var(--surface2);padding:1px 6px;border-radius:5px;font-family:'DM Mono',monospace;font-size:12px;color:var(--text2);border:1px solid var(--border);}
 
 /* DIAGRAM */
-.diag-wrap{margin-left:38px;margin-top:10px;max-width:92%;}
-.diag-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);}
-.diag-bar{display:flex;gap:6px;padding:9px 12px;background:var(--surface2);border-bottom:1px solid var(--border);flex-wrap:wrap;align-items:center;}
-.diag-title{font-size:11px;font-weight:600;color:var(--text2);margin-right:6px;}
-.diag-btn{display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-family:'Geist',sans-serif;transition:all 0.15s;}
+.diag-wrap{margin-left:42px;margin-top:12px;max-width:94%;}
+.diag-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow-sm);}
+.diag-bar{display:flex;gap:6px;padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--border);flex-wrap:wrap;align-items:center;}
+.diag-title{font-size:11px;font-weight:600;color:var(--text2);margin-right:6px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.5px;}
+.diag-btn{display:flex;align-items:center;gap:4px;padding:5px 11px;border-radius:6px;font-size:11px;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-family:'DM Sans',sans-serif;transition:all 0.15s;font-weight:500;}
 .diag-btn:hover{border-color:var(--border2);background:var(--surface2);color:var(--text);}
-.diag-btn.ok{background:rgba(34,197,94,0.08);border-color:rgba(34,197,94,0.3);color:#16a34a;}
+.diag-btn.ok{background:rgba(22,163,74,0.08);border-color:rgba(22,163,74,0.3);color:var(--green);}
 .diag-btn svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;}
-.diag-content{padding:20px;overflow-x:auto;background:var(--surface);}
+.diag-content{padding:24px;overflow-x:auto;background:var(--surface);}
 
 /* TYPING */
-.typing-dots{display:flex;gap:4px;padding:4px 0;align-items:center;}
+.typing-dots{display:flex;gap:5px;padding:4px 0;align-items:center;}
 .typing-dots span{width:5px;height:5px;border-radius:50%;background:var(--text3);animation:td 1.2s infinite;}
 .typing-dots span:nth-child(2){animation-delay:0.2s;}
 .typing-dots span:nth-child(3){animation-delay:0.4s;}
 @keyframes td{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-5px);}}
 
-/* BOTTOM */
-.bottom{background:var(--surface);border-top:1px solid var(--border);}
-.notice{text-align:center;font-size:10px;color:var(--text3);padding:6px 24px;border-bottom:1px solid var(--border);font-family:'Geist Mono',monospace;}
-.input-row{padding:12px 16px;display:flex;gap:10px;align-items:flex-end;}
-.input-box{flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;display:flex;align-items:flex-end;padding:9px 13px;transition:border-color 0.2s;}
-.input-box:focus-within{border-color:var(--border2);}
-textarea{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:'Geist',sans-serif;font-size:13.5px;line-height:1.5;resize:none;max-height:120px;min-height:22px;overflow-y:auto;}
-textarea::placeholder{color:var(--text3);}
-.send{width:36px;height:36px;background:var(--accent);border:none;border-radius:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity 0.2s;}
-.send:hover{opacity:0.8;}
-.send:disabled{opacity:0.3;cursor:not-allowed;}
-.send svg{width:15px;height:15px;fill:var(--accent-fg);}
-.foot{text-align:center;padding:6px;font-size:10px;color:var(--text3);font-family:'Geist Mono',monospace;}
-.foot strong{color:var(--text2);}
+/* BOTTOM INPUT (in chat mode) */
+.chat-input-area{
+  background:var(--bg);border-top:1px solid var(--border);
+  padding:16px 24px 20px;
+}
+.chat-input-inner{max-width:720px;margin:0 auto;}
+.chat-input-box{
+  background:var(--surface);border:1.5px solid var(--border2);
+  border-radius:14px;padding:12px 14px 10px;
+  box-shadow:var(--shadow-sm);transition:border-color 0.2s,box-shadow 0.2s;
+}
+.chat-input-box:focus-within{border-color:var(--text);box-shadow:var(--shadow-md);}
+.chat-input-row{display:flex;gap:10px;align-items:flex-end;}
+.chat-textarea{
+  flex:1;background:transparent;border:none;outline:none;
+  color:var(--text);font-family:'DM Sans',sans-serif;
+  font-size:14px;line-height:1.5;resize:none;
+  max-height:120px;min-height:22px;overflow-y:auto;
+}
+.chat-textarea::placeholder{color:var(--text3);}
+.chat-send{
+  width:34px;height:34px;background:var(--accent);border:none;
+  border-radius:8px;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;transition:opacity 0.2s;
+}
+.chat-send:hover{opacity:0.8;}
+.chat-send:disabled{opacity:0.3;cursor:not-allowed;}
+.chat-send svg{width:14px;height:14px;fill:var(--accent-fg);}
+.chat-footer{text-align:center;margin-top:8px;font-size:10.5px;color:var(--text3);font-family:'DM Mono',monospace;}
 
 /* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.25s;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);backdrop-filter:blur(6px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.25s;}
 .modal-overlay.open{opacity:1;pointer-events:all;}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;width:100%;max-width:620px;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.2);transform:translateY(12px);transition:transform 0.25s;}
-.modal-overlay.open .modal{transform:translateY(0);}
-.modal-header{padding:20px 24px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--surface);border-bottom:1px solid var(--border);z-index:10;}
-.modal-title{font-size:17px;font-weight:600;color:var(--text);}
-.modal-close{width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text2);}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;width:100%;max-width:640px;max-height:88vh;overflow-y:auto;box-shadow:var(--shadow-lg);transform:translateY(16px) scale(0.98);transition:transform 0.25s;}
+.modal-overlay.open .modal{transform:translateY(0) scale(1);}
+.modal-header{padding:22px 26px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--surface);border-bottom:1px solid var(--border);z-index:10;backdrop-filter:blur(10px);}
+.modal-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--text);}
+.modal-close{width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text2);transition:all 0.15s;}
 .modal-close:hover{background:var(--border);}
-.modal-body{padding:24px;}
-.about-hero{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:20px;text-align:center;}
-.about-tagline{font-size:20px;font-weight:600;color:var(--text);margin-bottom:10px;line-height:1.3;}
-.about-desc{font-size:13px;color:var(--text2);line-height:1.7;}
-.about-section{margin-bottom:22px;}
-.about-section-title{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:12px;font-family:'Geist Mono',monospace;}
-.diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.diff-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;}
-.diff-icon{font-size:20px;margin-bottom:8px;}
-.diff-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;}
-.diff-desc{font-size:11px;color:var(--text2);line-height:1.5;}
-.who-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
-.who-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;}
-.who-icon{font-size:20px;margin-bottom:6px;}
-.who-label{font-size:12px;font-weight:500;color:var(--text);}
-.who-desc{font-size:11px;color:var(--text2);margin-top:3px;line-height:1.4;}
-.built-by-section{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;display:flex;align-items:center;gap:14px;}
-.built-avatar{width:40px;height:40px;background:var(--text);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--accent-fg);font-family:'Geist Mono',monospace;flex-shrink:0;}
-.built-name{font-size:14px;font-weight:600;color:var(--text);}
-.built-note{font-size:11px;color:var(--text2);margin-top:6px;line-height:1.5;}
-.accuracy-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;}
-.accuracy-icon{font-size:14px;flex-shrink:0;margin-top:1px;}
-.accuracy-text{font-size:12px;color:var(--text2);line-height:1.5;}
+.modal-body{padding:26px;}
+.about-section-title{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;font-family:'DM Mono',monospace;}
+.about-hero{background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:22px;text-align:center;}
+.about-tagline{font-family:'DM Serif Display',serif;font-size:22px;color:var(--text);margin-bottom:10px;line-height:1.3;}
+.about-desc{font-size:13px;color:var(--text2);line-height:1.8;}
+.about-section{margin-bottom:24px;}
+.diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.diff-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.diff-icon{font-size:22px;margin-bottom:10px;}
+.diff-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px;}
+.diff-desc{font-size:11.5px;color:var(--text2);line-height:1.6;}
+.who-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.who-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;}
+.who-icon{font-size:22px;margin-bottom:8px;}
+.who-label{font-size:12px;font-weight:600;color:var(--text);}
+.who-desc{font-size:11px;color:var(--text2);margin-top:4px;line-height:1.5;}
+.built-by{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:18px;display:flex;align-items:center;gap:16px;}
+.built-avatar{width:44px;height:44px;background:var(--text);border-radius:11px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--accent-fg);font-family:'DM Mono',monospace;flex-shrink:0;}
+.built-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.built-role{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;}
+.built-note{font-size:11.5px;color:var(--text2);margin-top:8px;line-height:1.6;}
+.accuracy-item{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;}
+.accuracy-icon{font-size:15px;flex-shrink:0;margin-top:1px;}
+.accuracy-text{font-size:12px;color:var(--text2);line-height:1.6;}
 .accuracy-text strong{color:var(--text);font-weight:500;}
-.disclaimer-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:11px;color:var(--text3);line-height:1.6;font-family:'Geist Mono',monospace;}
-.cta-box{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;margin-bottom:20px;}
-@media(max-width:640px){.sidebar{display:none;}.messages{padding:16px;}}
+.disclaimer-box{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:11px;color:var(--text3);line-height:1.7;font-family:'DM Mono',monospace;}
+.cta-box{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:22px;text-align:center;margin-bottom:22px;}
+.cta-btn{display:inline-block;padding:10px 24px;background:var(--text);color:var(--accent-fg);border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity 0.2s;}
+.cta-btn:hover{opacity:0.85;}
+
+@media(max-width:640px){.welcome h1{font-size:36px;}.hero-input-wrap{border-radius:12px;}.messages{padding:20px 16px;}}
 </style>
 </head>
 <body>
+
 <div class="header">
-  <div class="logo">
-    <svg viewBox="0 0 24 24"><path d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
-  </div>
-  <span class="brand">CloudevAI</span>
+  <button class="sidebar-toggle" onclick="toggleSidebar()" title="History">
+    <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <span class="brand">Cloudev<span class="brand-dot">AI</span></span>
   <div class="header-right">
     <button class="about-btn" onclick="openAbout()">About</button>
     <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
   </div>
 </div>
 
-<div class="main">
-  <div class="sidebar">
-    <div class="sidebar-top">
-      <button class="new-btn" onclick="goHome()">
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-inner">
+      <button class="new-btn" onclick="goHome();closeSidebar();">
         <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         New conversation
       </button>
-    </div>
-    <div class="sidebar-label">History</div>
-    <div class="history-list" id="historyList">
-      <div class="history-empty" id="historyEmpty">No conversations yet.<br/>Start by asking a question.</div>
+      <div class="sidebar-label">History</div>
+      <div class="history-list" id="historyList">
+        <div class="history-empty" id="historyEmpty">No conversations yet.</div>
+      </div>
     </div>
   </div>
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
-  <div class="chat-area">
+  <!-- CHAT -->
+  <div class="chat-area" id="chatArea">
     <div class="messages" id="messages">
       <div class="welcome" id="welcome">
-        <div class="welcome-mark">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
+        <div class="welcome-badge">
+          <span class="welcome-badge-dot"></span>
+          Beta — Free to use
         </div>
-        <div>
-          <h2>What can I help you with?</h2>
-          <p class="welcome-sub">Expert cloud architect & DevOps engineer. Ask about infrastructure, errors, Terraform, Kubernetes, CI/CD, Linux and more.</p>
+        <h1>Your cloud expert,<br/><em>always available.</em></h1>
+        <p class="welcome-sub">Ask anything about AWS, Azure, GCP, Terraform, Kubernetes, Linux or CI/CD — get production-ready answers instantly.</p>
+
+        <div class="hero-input-wrap" id="heroInputWrap">
+          <textarea class="hero-textarea" id="heroInput" placeholder="Ask me anything about cloud infrastructure..." rows="1"
+            onkeydown="handleHeroKey(event)" oninput="autoResize(this)"></textarea>
+          <div class="hero-input-footer">
+            <span class="hero-hint">↵ Enter to send</span>
+            <button class="hero-send" id="heroSendBtn" onclick="sendFromHero()">
+              <svg viewBox="0 0 24 24"><path d="M2 21L23 12 2 3v7l15 2-15 2z"/></svg>
+            </button>
+          </div>
         </div>
-        <div class="starter-grid">
-          <div class="starter" onclick="askQuick('How do I fix an AccessDenied error on a storage bucket?')"><div class="starter-icon">🔴</div><div class="starter-text">Fix a cloud access denied error</div></div>
-          <div class="starter" onclick="askQuick('Write a Terraform script to create a scalable web server with auto scaling')"><div class="starter-icon">⚙️</div><div class="starter-text">Generate Terraform infrastructure</div></div>
-          <div class="starter" onclick="askQuick('Draw me a 3-tier web application architecture diagram')"><div class="starter-icon">🏗️</div><div class="starter-text">Generate an architecture diagram</div></div>
-          <div class="starter" onclick="askQuick('Show me a CI/CD pipeline sequence diagram with deployment stages')"><div class="starter-icon">🔄</div><div class="starter-text">Diagram a CI/CD pipeline</div></div>
+
+        <div class="suggestions">
+          <div class="suggestion" onclick="askQuick('How do I fix an AccessDenied error on S3?')">Fix S3 AccessDenied error</div>
+          <div class="suggestion" onclick="askQuick('Write Terraform for an auto-scaling web server on AWS')">Terraform auto-scaling</div>
+          <div class="suggestion" onclick="askQuick('Draw me an AWS 3-tier web architecture diagram')">Architecture diagram</div>
+          <div class="suggestion" onclick="askQuick('My Kubernetes pod is in CrashLoopBackOff how do I fix it?')">Debug CrashLoopBackOff</div>
+          <div class="suggestion" onclick="askQuick('How do I set up a CI/CD pipeline with GitHub Actions?')">GitHub Actions CI/CD</div>
+          <div class="suggestion" onclick="askQuick('How do I reduce my AWS bill?')">Cut cloud costs</div>
         </div>
       </div>
     </div>
 
-    <div class="bottom">
-      <div class="notice">⚠ Never share credentials, API keys or passwords in this chat</div>
-      <div class="input-row">
-        <div class="input-box">
-          <textarea id="input" placeholder="Ask about cloud, DevOps, Terraform, Kubernetes, Linux, CI/CD..." rows="1"
-            onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+    <!-- BOTTOM INPUT (shows after first message) -->
+    <div class="chat-input-area" id="chatInputArea" style="display:none;">
+      <div class="chat-input-inner">
+        <div class="chat-input-box">
+          <div class="chat-input-row">
+            <textarea class="chat-textarea" id="chatInput" placeholder="Ask about cloud, DevOps, Terraform, Kubernetes..." rows="1"
+              onkeydown="handleChatKey(event)" oninput="autoResize(this)"></textarea>
+            <button class="chat-send" id="chatSendBtn" onclick="sendFromChat()">
+              <svg viewBox="0 0 24 24"><path d="M2 21L23 12 2 3v7l15 2-15 2z"/></svg>
+            </button>
+          </div>
         </div>
-        <button class="send" id="sendBtn" onclick="sendMessage()">
-          <svg viewBox="0 0 24 24"><path d="M2 21L23 12 2 3v7l15 2-15 2z"/></svg>
-        </button>
+        <div class="chat-footer">⚠ Never share credentials, API keys or passwords &nbsp;·&nbsp; CloudevAI &nbsp;·&nbsp; <strong>Built by Anirudh Jagannadh</strong> &nbsp;·&nbsp; May 2026</div>
       </div>
-      <div class="foot">CloudevAI &nbsp;·&nbsp; Not affiliated with any cloud provider &nbsp;·&nbsp; <strong>Built by Anirudh Jagannadh</strong> &nbsp;·&nbsp; May 2026</div>
     </div>
   </div>
 </div>
@@ -243,179 +385,155 @@ textarea::placeholder{color:var(--text3);}
     </div>
     <div class="modal-body">
       <div class="about-hero">
-        <div style="width:48px;height:48px;background:var(--text);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">
-          <svg viewBox="0 0 24 24" width="26" height="26" fill="var(--accent-fg)"><path d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
-        </div>
-        <div style="display:inline-block;padding:4px 12px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:10px;font-weight:600;color:var(--text3);letter-spacing:0.8px;text-transform:uppercase;font-family:'Geist Mono',monospace;margin-bottom:14px;">Beta — Free to use</div>
-        <div class="about-tagline">Production-Ready Cloud Decisions<br/>at 2am, Under Pressure, When It Matters Most.</div>
-        <p class="about-desc" style="margin-top:12px;">CloudevAI is a specialist AI assistant built exclusively for cloud engineers and DevOps teams. Not a general tool. A dedicated cloud expert — available 24/7, completely free — that speaks your language and gets straight to the answer.</p>
+        <div style="display:inline-block;padding:5px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:10px;font-weight:600;color:var(--text3);letter-spacing:0.8px;text-transform:uppercase;font-family:'DM Mono',monospace;margin-bottom:16px;">Beta — Free to use</div>
+        <div class="about-tagline">Production-Ready Cloud Decisions<br/>at 2am, Under Pressure.</div>
+        <p class="about-desc" style="margin-top:12px;">CloudevAI is a specialist AI assistant built exclusively for cloud engineers. Not a general tool. A dedicated cloud expert built by an 11-year AWS platform engineer who got frustrated with tools that gave general answers to production problems.</p>
         <div style="margin-top:16px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
           <span style="padding:5px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--text2);">☁️ AWS · Azure · GCP</span>
           <span style="padding:5px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--text2);">🏗️ Architecture diagrams</span>
           <span style="padding:5px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--text2);">⚙️ Terraform & IaC</span>
           <span style="padding:5px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--text2);">🔒 Security first</span>
-          <span style="padding:5px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--text2);">💻 Copy-ready commands</span>
         </div>
       </div>
 
       <div class="about-section">
-        <div class="about-section-title">Why Specialist Beats Generalist</div>
+        <div class="about-section-title">Why CloudevAI</div>
         <div class="diff-grid">
-          <div class="diff-card"><div class="diff-icon">🎯</div><div class="diff-title">Structured Every Time</div><div class="diff-desc">Every answer follows the same professional format — problem, solution, commands, warnings and references.</div></div>
-          <div class="diff-card"><div class="diff-icon">💻</div><div class="diff-title">Copy With One Click</div><div class="diff-desc">Every CLI command has its own copy button. AWS, Azure, GCP, Terraform, Docker, Kubectl — ready to paste.</div></div>
-          <div class="diff-card"><div class="diff-icon">🏗️</div><div class="diff-title">Diagrams On Demand</div><div class="diff-desc">Ask for any architecture, CI/CD pipeline or infrastructure flow — get a professional diagram instantly.</div></div>
-          <div class="diff-card"><div class="diff-icon">🔒</div><div class="diff-title">Security Baked In</div><div class="diff-desc">Security warnings included in every relevant answer. Credential exposure alerts built into the foundation.</div></div>
-          <div class="diff-card"><div class="diff-icon">📋</div><div class="diff-title">Any Format You Need</div><div class="diff-desc">Console steps, CLI commands, Terraform code or Python SDK — just ask for the format you need.</div></div>
-          <div class="diff-card"><div class="diff-icon">☁️</div><div class="diff-title">All 3 Clouds</div><div class="diff-desc">AWS, Azure and GCP all in one place. Troubleshoot, compare and build across every major platform.</div></div>
-        </div>
-        <div style="margin-top:14px;padding:16px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;">
-          <p style="font-size:13px;color:var(--text);font-weight:500;margin-bottom:6px;">The right tool for the right job.</p>
-          <p style="font-size:12px;color:var(--text2);line-height:1.7;">A surgeon and a GP are both doctors. You would not go to a GP for open heart surgery. CloudevAI is the specialist — built exclusively for cloud engineers who want fast, accurate, production-ready answers without the noise.</p>
+          <div class="diff-card"><div class="diff-icon">🎯</div><div class="diff-title">Structured Every Time</div><div class="diff-desc">Every answer follows the same format — problem, solution, commands, warnings, references. Consistent under pressure.</div></div>
+          <div class="diff-card"><div class="diff-icon">💻</div><div class="diff-title">Copy With One Click</div><div class="diff-desc">Every CLI command has its own copy button. AWS, Azure, GCP, Terraform, Docker, Kubectl — one click to terminal.</div></div>
+          <div class="diff-card"><div class="diff-icon">🏗️</div><div class="diff-title">Diagrams On Demand</div><div class="diff-desc">Ask for any architecture or CI/CD flow — get a professional diagram you can edit, download and share.</div></div>
+          <div class="diff-card"><div class="diff-icon">🔒</div><div class="diff-title">Security Baked In</div><div class="diff-desc">Credential exposure alerts built in from the foundation. Security is not a feature — it is the architecture.</div></div>
         </div>
       </div>
 
       <div class="about-section">
         <div class="about-section-title">How We Ensure Accuracy</div>
-        <div class="accuracy-item"><div class="accuracy-icon">🤖</div><div class="accuracy-text"><strong>Powered by Claude AI (Anthropic)</strong> — trained on official cloud documentation, technical literature and real-world engineering knowledge.</div></div>
-        <div class="accuracy-item"><div class="accuracy-icon">📚</div><div class="accuracy-text"><strong>Every answer references official docs</strong> — links to AWS, Azure and GCP documentation so you can verify independently.</div></div>
-        <div class="accuracy-item"><div class="accuracy-icon">❓</div><div class="accuracy-text"><strong>Honest when uncertain</strong> — if the answer requires more context, CloudevAI asks clarifying questions rather than guessing.</div></div>
-        <div class="accuracy-item"><div class="accuracy-icon">⚠️</div><div class="accuracy-text"><strong>Always verify in non-production</strong> — every complex answer reminds you to test before applying to production environments.</div></div>
+        <div class="accuracy-item"><div class="accuracy-icon">🤖</div><div class="accuracy-text"><strong>Powered by Claude AI (Anthropic)</strong> — trained on official cloud documentation and real-world engineering knowledge.</div></div>
+        <div class="accuracy-item"><div class="accuracy-icon">📚</div><div class="accuracy-text"><strong>References official documentation</strong> — links to AWS, Azure and GCP docs so you can verify independently.</div></div>
+        <div class="accuracy-item"><div class="accuracy-icon">⚠️</div><div class="accuracy-text"><strong>Always verify in non-production</strong> — every complex answer includes a reminder to test before applying to production.</div></div>
       </div>
 
       <div class="about-section">
         <div class="about-section-title">Who Is This For</div>
         <div class="who-grid">
-          <div class="who-card"><div class="who-icon">👩‍💻</div><div class="who-label">Developers</div><div class="who-desc">Fix cloud errors and get CLI commands instantly</div></div>
-          <div class="who-card"><div class="who-icon">🏢</div><div class="who-label">IT Teams</div><div class="who-desc">Architecture advice and infrastructure design</div></div>
-          <div class="who-card"><div class="who-icon">🚀</div><div class="who-label">Startups</div><div class="who-desc">Cost optimization and cloud best practices</div></div>
+          <div class="who-card"><div class="who-icon">👩‍💻</div><div class="who-label">Cloud Engineers</div><div class="who-desc">Production answers under pressure</div></div>
+          <div class="who-card"><div class="who-icon">⚙️</div><div class="who-label">DevOps Teams</div><div class="who-desc">Architecture and pipeline design</div></div>
+          <div class="who-card"><div class="who-icon">🚀</div><div class="who-label">Startups</div><div class="who-desc">Cost optimization and best practices</div></div>
         </div>
       </div>
 
       <div class="about-section">
         <div class="about-section-title">Built By</div>
-        <div class="built-by-section">
+        <div class="built-by">
           <div class="built-avatar">AJ</div>
           <div>
             <div class="built-name">Anirudh Jagannadh</div>
-            <div class="built-note">AWS Cloud Platform Engineer with 11 years of experience. Built CloudevAI because after a decade in the cloud — I still could not find a tool that gave me the right answer with confidence. So I built it myself.</div>
+            <div class="built-role">AWS Cloud Platform Engineer · 11 Years</div>
+            <div class="built-note">Built CloudevAI because after 11 years in cloud I still could not find a tool that gave me the right answer with confidence at 2am. So I built it myself.</div>
           </div>
         </div>
       </div>
 
       <div class="cta-box">
-        <div style="font-size:22px;margin-bottom:10px;">🙌</div>
-        <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:8px;">Currently in Beta — Shaping the future together</div>
-        <p style="font-size:12px;color:var(--text2);line-height:1.7;max-width:380px;margin:0 auto 16px;">This tool is free and actively being improved. Your feedback directly shapes what gets built next.</p>
-        <div style="display:inline-block;padding:9px 22px;background:var(--text);color:var(--accent-fg);border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;" onclick="closeAbout()">Try it now — it is free</div>
+        <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;">Currently in Beta</div>
+        <p style="font-size:12px;color:var(--text2);line-height:1.7;max-width:380px;margin:0 auto 16px;">Free to use. Your feedback shapes every version. If something is wrong or missing — tell us.</p>
+        <div class="cta-btn" onclick="closeAbout()">Try it now — it is free</div>
       </div>
 
-      <div class="disclaimer-box">⚠ CloudevAI is an independent educational tool currently in beta. Not affiliated with, endorsed by or officially connected to Amazon Web Services, Microsoft Azure or Google Cloud Platform. All guidance is for educational purposes only. Always verify with official documentation before implementing in production environments.</div>
+      <div class="disclaimer-box">⚠ CloudevAI is an independent educational tool in beta. Not affiliated with Amazon Web Services, Microsoft Azure or Google Cloud Platform. Always verify with official documentation before implementing in production.</div>
     </div>
   </div>
 </div>
 
 <script>
-const SYSTEM=`You are CloudevAI, an expert cloud architect and DevOps engineer with 11 years of experience. Built by Anirudh Jagannadh.
+const SYSTEM=`You are CloudevAI, an expert cloud architect and DevOps engineer with 11 years of AWS platform engineering experience. Built by Anirudh Jagannadh.
 
-You specialize in:
-- AWS, Microsoft Azure, and Google Cloud Platform (GCP)
-- Infrastructure as Code (Terraform, Pulumi, CloudFormation, Bicep)
-- Cloud architecture, troubleshooting, and CLI commands
-- Security, cost optimization, and best practices
-- Linux system administration and shell scripting
-- Networking (DNS, VPC, subnets, firewalls, load balancers)
-- Containers and orchestration (Docker, Kubernetes, Helm)
-- CI/CD pipelines (GitHub Actions, GitLab CI, Jenkins, AWS CodePipeline, Azure DevOps)
-- Monitoring and observability (CloudWatch, Prometheus, Grafana, Datadog)
+You specialize in: AWS, Azure, GCP, Terraform, Pulumi, CloudFormation, Linux, Docker, Kubernetes, Helm, GitHub Actions, GitLab CI, Jenkins, CloudWatch, Prometheus, Grafana, networking, security and related DevOps tooling.
 
-BEHAVIOR:
-- Provide accurate, practical, real-world solutions
-- Keep answers clear, structured, and easy to follow
-- Adapt depth based on user level
-- If unclear, ask 1-2 concise clarifying questions
-- Avoid unnecessary verbosity
+BEHAVIOR: Practical real-world solutions. Clear and structured. Step-by-step guidance. Adapt to user level. Ask 1-2 clarifying questions if unclear. Be precise not verbose.
 
-FORMAT RULE:
-Match format to what user asks:
-- Console steps if user asks for UI steps
-- CLI if user asks for commands
-- Terraform if user asks for IaC
-- Python/SDK if user asks for code
-- Default to CLI and offer alternatives at end
+FORMAT RULE: Match format to request. Default to CLI with offer of alternatives at end: "Need this as Terraform or Console steps? Just ask."
 
-SCOPE: Cloud, DevOps, infrastructure, networking, Linux, CI/CD, containers, IaC, monitoring, security and related tooling only.
-If asked something unrelated say: "I specialize in cloud and DevOps topics only. Happy to help with any infrastructure question!"
+SCOPE: Cloud, DevOps, infrastructure, networking, Linux, CI/CD, containers, IaC, monitoring, security only. For unrelated topics say: "I specialise in cloud and DevOps only. Happy to help with any infrastructure question!"
 
-SECURITY RULE: If anyone shares API keys, secrets, passwords or credentials respond immediately:
-"🚨 SECURITY ALERT: Sensitive credentials detected. Please rotate these immediately. Never share credentials in chat tools."
+SECURITY RULE: If credentials or API keys are shared respond: "🚨 SECURITY ALERT: Sensitive credentials detected. Please rotate these immediately. Never share credentials in chat tools."
 
-DIAGRAM RULE: When user asks for any diagram — generate Mermaid:
-- Architecture: graph TD or graph LR only
-- CI/CD: graph LR only
-- Never use sequenceDiagram or stateDiagram
+DIAGRAM RULE: When user asks for ANY diagram, architecture, flowchart or visual — you MUST generate a Mermaid diagram wrapped in <diagram></diagram> tags. This is MANDATORY.
 
-Wrap ALL diagrams like this:
+ONLY use graph TD or graph LR. NEVER use sequenceDiagram or stateDiagram.
+
+Example of CORRECT diagram format:
 <diagram>
 graph TD
-    A[Component] --> B[Component]
-    style A fill:#374151,stroke:#1f2937,color:#fff
-    style B fill:#4b5563,stroke:#374151,color:#fff
+    A[Users] --> B[Load_Balancer]
+    B --> C[Web_Server_1]
+    B --> D[Web_Server_2]
+    C --> E[(Database)]
+    D --> E
+    style A fill:#9ca3af,stroke:#6b7280,color:#fff
+    style B fill:#6b7280,stroke:#4b5563,color:#fff
+    style C fill:#374151,stroke:#1f2937,color:#fff
+    style D fill:#374151,stroke:#1f2937,color:#fff
+    style E fill:#1f2937,stroke:#111827,color:#fff
 </diagram>
 
-MERMAID RULES:
-- ONLY use graph TD or graph LR
-- Keep ALL node labels under 3 words
-- NO special characters in labels
-- NO parentheses in node text
-- Use underscore for spaces in IDs
-- Always add style for every node
-- Colors: servers #374151, storage #4b5563, network #6b7280, security #1f2937, users #9ca3af
+MERMAID RULES — follow exactly or diagram breaks:
+- ONLY graph TD or graph LR
+- Node IDs: no spaces, no special chars, use underscore
+- Labels: max 3 words, no colons, no quotes, no parentheses
+- Always add style line for EVERY node
+- Colors: servers #374151, storage/db #1f2937, network #6b7280, users #9ca3af, security #dc2626, cicd #4b5563
 
-CLI COMMAND RULE: Wrap EVERY command in triple backticks with label:
-- aws for AWS CLI
-- az for Azure CLI  
-- gcloud for GCP CLI
-- terraform for Terraform
-- kubectl for Kubernetes
-- docker for Docker
-- bash for Linux/Shell
-- powershell for PowerShell
-- python for Python SDK
+CLI RULE: Every command in triple backticks with label: aws, az, gcloud, terraform, kubectl, docker, bash, powershell, python.
 
 RESPONSE FORMAT:
-🔍 PROBLEM UNDERSTOOD: [brief restatement]
+🔍 PROBLEM UNDERSTOOD: [restatement]
 ✅ SOLUTION: [numbered steps]
-💻 COMMANDS: [every command in labeled code blocks]
-⚠️ IMPORTANT NOTES: [security, cost, warnings]
+💻 COMMANDS: [labeled code blocks]
+⚠️ IMPORTANT NOTES: [warnings]
 📚 OFFICIAL REFERENCE: [docs link]
 
-Do NOT add any disclaimer at the end of answers.`;
+Do NOT add disclaimers or signatures at end of answers.`;
 
-let messages=[],isLoading=false;
-let chatHistory=JSON.parse(localStorage.getItem('cv2History')||'[]');
+let messages=[],isLoading=false,inChat=false;
+let chatHistory=JSON.parse(localStorage.getItem('cv3History')||'[]');
 let currentId=null,diagN=0,cpN=0;
 
+// THEME
 function toggleTheme(){
-  const h=document.documentElement;
-  const d=h.getAttribute('data-theme')==='dark';
+  const h=document.documentElement,d=h.getAttribute('data-theme')==='dark';
   h.setAttribute('data-theme',d?'light':'dark');
   document.getElementById('themeBtn').textContent=d?'🌙':'☀️';
-  localStorage.setItem('cv2Theme',d?'light':'dark');
+  localStorage.setItem('cv3Theme',d?'light':'dark');
 }
 (function(){
-  const t=localStorage.getItem('cv2Theme')||'light';
+  const t=localStorage.getItem('cv3Theme')||'light';
   document.documentElement.setAttribute('data-theme',t);
   document.addEventListener('DOMContentLoaded',()=>{
-    const btn=document.getElementById('themeBtn');
-    if(btn)btn.textContent=t==='dark'?'☀️':'🌙';
+    const b=document.getElementById('themeBtn');
+    if(b)b.textContent=t==='dark'?'☀️':'🌙';
   });
 })();
 
+// SIDEBAR
+function toggleSidebar(){
+  const s=document.getElementById('sidebar');
+  const o=document.getElementById('sidebarOverlay');
+  if(s.classList.contains('open')){s.classList.remove('open');o.classList.remove('show');}
+  else{s.classList.add('open');o.classList.add('show');}
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('show');
+}
+
+// ABOUT
 function openAbout(){document.getElementById('aboutModal').classList.add('open');}
 function closeAbout(){document.getElementById('aboutModal').classList.remove('open');}
 function closeAboutOutside(e){if(e.target.id==='aboutModal')closeAbout();}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAbout();});
 
+// HISTORY
 function renderHistory(){
   const list=document.getElementById('historyList');
   const empty=document.getElementById('historyEmpty');
@@ -426,7 +544,7 @@ function renderHistory(){
     const d=document.createElement('div');
     d.className='history-item'+(c.id===currentId?' active':'');
     d.innerHTML=`<span class="hi-del" onclick="delChat('${c.id}',event)">✕</span><div class="hi-title">${c.title}</div><div class="hi-time">${c.time}</div>`;
-    d.onclick=()=>loadChat(c.id);
+    d.onclick=()=>{loadChat(c.id);closeSidebar();};
     list.appendChild(d);
   });
 }
@@ -438,15 +556,15 @@ function saveChat(first){
     chatHistory.push({id:currentId,title:first.length>38?first.slice(0,38)+'…':first,time:now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),messages:[]});
   }
   const c=chatHistory.find(x=>x.id===currentId);
-  if(c){c.messages=[...messages];localStorage.setItem('cv2History',JSON.stringify(chatHistory));}
+  if(c){c.messages=[...messages];localStorage.setItem('cv3History',JSON.stringify(chatHistory));}
   renderHistory();
 }
 
 function loadChat(id){
-  const c=chatHistory.find(x=>x.id===id);
-  if(!c)return;
+  const c=chatHistory.find(x=>x.id===id);if(!c)return;
   currentId=id;messages=[...c.messages];
-  document.getElementById('messages').innerHTML='';
+  switchToChat();
+  document.getElementById('messages').innerHTML='<div class="msg-list" id="msgList"></div>';
   messages.forEach(m=>addMsg(m.role==='user'?'user':'ai',m.content));
   renderHistory();
 }
@@ -454,30 +572,76 @@ function loadChat(id){
 function delChat(id,e){
   e.stopPropagation();
   chatHistory=chatHistory.filter(c=>c.id!==id);
-  localStorage.setItem('cv2History',JSON.stringify(chatHistory));
+  localStorage.setItem('cv3History',JSON.stringify(chatHistory));
   if(currentId===id)goHome();else renderHistory();
 }
 
+function switchToChat(){
+  if(!inChat){
+    inChat=true;
+    document.getElementById('messages').innerHTML='<div class="msg-list" id="msgList"></div>';
+    document.getElementById('chatInputArea').style.display='block';
+    document.getElementById('messages').style.paddingTop='24px';
+  }
+}
+
 function goHome(){
-  currentId=null;messages=[];
+  currentId=null;messages=[];inChat=false;
   document.getElementById('messages').innerHTML=`
     <div class="welcome" id="welcome">
-      <div class="welcome-mark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg></div>
-      <div><h2>What can I help you with?</h2><p class="welcome-sub">Expert cloud architect & DevOps engineer. Ask about infrastructure, errors, Terraform, Kubernetes, CI/CD, Linux and more.</p></div>
-      <div class="starter-grid">
-        <div class="starter" onclick="askQuick('How do I fix an AccessDenied error on a storage bucket?')"><div class="starter-icon">🔴</div><div class="starter-text">Fix a cloud access denied error</div></div>
-        <div class="starter" onclick="askQuick('Write a Terraform script to create a scalable web server with auto scaling')"><div class="starter-icon">⚙️</div><div class="starter-text">Generate Terraform infrastructure</div></div>
-        <div class="starter" onclick="askQuick('Draw me a 3-tier web application architecture diagram')"><div class="starter-icon">🏗️</div><div class="starter-text">Generate an architecture diagram</div></div>
-        <div class="starter" onclick="askQuick('Show me a CI/CD pipeline sequence diagram with deployment stages')"><div class="starter-icon">🔄</div><div class="starter-text">Diagram a CI/CD pipeline</div></div>
+      <div class="welcome-badge"><span class="welcome-badge-dot"></span>Beta — Free to use</div>
+      <h1>Your cloud expert,<br/><em>always available.</em></h1>
+      <p class="welcome-sub">Ask anything about AWS, Azure, GCP, Terraform, Kubernetes, Linux or CI/CD — get production-ready answers instantly.</p>
+      <div class="hero-input-wrap" id="heroInputWrap">
+        <textarea class="hero-textarea" id="heroInput" placeholder="Ask me anything about cloud infrastructure..." rows="1" onkeydown="handleHeroKey(event)" oninput="autoResize(this)"></textarea>
+        <div class="hero-input-footer">
+          <span class="hero-hint">↵ Enter to send</span>
+          <button class="hero-send" id="heroSendBtn" onclick="sendFromHero()"><svg viewBox="0 0 24 24"><path d="M2 21L23 12 2 3v7l15 2-15 2z"/></svg></button>
+        </div>
+      </div>
+      <div class="suggestions">
+        <div class="suggestion" onclick="askQuick('How do I fix an AccessDenied error on S3?')">Fix S3 AccessDenied error</div>
+        <div class="suggestion" onclick="askQuick('Write Terraform for an auto-scaling web server on AWS')">Terraform auto-scaling</div>
+        <div class="suggestion" onclick="askQuick('Draw me an AWS 3-tier web architecture diagram')">Architecture diagram</div>
+        <div class="suggestion" onclick="askQuick('My Kubernetes pod is in CrashLoopBackOff how do I fix it?')">Debug CrashLoopBackOff</div>
+        <div class="suggestion" onclick="askQuick('How do I set up a CI/CD pipeline with GitHub Actions?')">GitHub Actions CI/CD</div>
+        <div class="suggestion" onclick="askQuick('How do I reduce my AWS bill?')">Cut cloud costs</div>
       </div>
     </div>`;
+  document.getElementById('chatInputArea').style.display='none';
+  document.getElementById('messages').style.paddingTop='40px';
   renderHistory();
 }
 
-function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
-function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}}
-function askQuick(q){document.getElementById('input').value=q;sendMessage();}
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,160)+'px';}
+function handleHeroKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendFromHero();}}
+function handleChatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendFromChat();}}
 
+function getInput(){
+  if(!inChat){
+    const el=document.getElementById('heroInput');
+    return el?el.value.trim():'';
+  }
+  const el=document.getElementById('chatInput');
+  return el?el.value.trim():'';
+}
+
+function clearInput(){
+  if(!inChat){const el=document.getElementById('heroInput');if(el){el.value='';el.style.height='auto';}}
+  else{const el=document.getElementById('chatInput');if(el){el.value='';el.style.height='auto';}}
+}
+
+function sendFromHero(){const t=getInput();if(t)sendMessage(t);}
+function sendFromChat(){const t=getInput();if(t)sendMessage(t);}
+function askQuick(q){
+  switchToChat();
+  setTimeout(()=>{
+    const el=document.getElementById('chatInput');
+    if(el){el.value=q;sendFromChat();}
+  },50);
+}
+
+// COPY
 function copyText(text,id){
   navigator.clipboard.writeText(text.trim()).then(()=>{
     const b=document.getElementById(id);if(!b)return;
@@ -488,6 +652,7 @@ function copyText(text,id){
   });
 }
 
+// FORMAT
 function extractDiagram(text){
   const m=text.match(/<diagram>([\s\S]*?)<\/diagram>/i);
   if(m)return{code:m[1].trim(),text:text.replace(/<diagram>[\s\S]*?<\/diagram>/gi,'').trim()};
@@ -525,14 +690,9 @@ function makeDiagram(code){
   setTimeout(()=>{
     if(window.mermaid){
       try{mermaid.init(undefined,md);}
-      catch(e){
-        md.innerHTML=`<div style="padding:20px;text-align:center;">
-          <div style="font-size:13px;color:var(--text2);margin-bottom:12px;">⚠️ Diagram could not render automatically.</div>
-          <div style="font-size:12px;color:var(--text3);">Click <strong>Edit</strong> to view and edit in Mermaid Live Editor.</div>
-        </div>`;
-      }
+      catch(e){md.innerHTML='<div style="padding:20px;text-align:center;font-size:13px;color:var(--text2);">⚠️ Diagram could not render. <strong>Click Edit</strong> to view in Mermaid Live.</div>';}
     }
-  },700);
+  },800);
   return wrap;
 }
 
@@ -544,13 +704,11 @@ function copyDiag(id,bid){
     setTimeout(()=>{b.innerHTML=o;b.classList.remove('ok');},2000);
   });
 }
-
 function editDiag(id){
   const code=document.getElementById(id).querySelector('.diag-content').getAttribute('data-m');
   const state={code,mermaid:{theme:'default'}};
   window.open('https://mermaid.live/edit#base64:'+btoa(unescape(encodeURIComponent(JSON.stringify(state)))),'_blank');
 }
-
 function dlDiag(id){
   const code=document.getElementById(id).querySelector('.diag-content').getAttribute('data-m');
   const a=document.createElement('a');
@@ -558,45 +716,56 @@ function dlDiag(id){
   a.download='diagram.mmd';a.click();
 }
 
+function getMsgList(){
+  let ml=document.getElementById('msgList');
+  if(!ml){
+    const msgs=document.getElementById('messages');
+    msgs.innerHTML='<div class="msg-list" id="msgList"></div>';
+    ml=document.getElementById('msgList');
+  }
+  return ml;
+}
+
 function addMsg(role,content){
-  const container=document.getElementById('messages');
-  const welcome=document.getElementById('welcome');if(welcome)welcome.remove();
+  switchToChat();
   const{code,text}=extractDiagram(content);
+  const ml=getMsgList();
   const div=document.createElement('div');div.className='msg '+role;
   const av=document.createElement('div');av.className='av '+(role==='ai'?'ai-av':'user-av');
-  av.textContent=role==='ai'?'CH':'ME';
+  av.textContent=role==='ai'?'AI':'ME';
   const bu=document.createElement('div');bu.className='bubble';
   bu.innerHTML=formatMsg(text);
-  div.appendChild(av);div.appendChild(bu);
-  container.appendChild(div);
-  if(code&&role==='ai')container.appendChild(makeDiagram(code));
-  container.scrollTop=container.scrollHeight;
+  div.appendChild(av);div.appendChild(bu);ml.appendChild(div);
+  if(code&&role==='ai')ml.appendChild(makeDiagram(code));
+  const msgs=document.getElementById('messages');
+  msgs.scrollTop=msgs.scrollHeight;
 }
 
 function showTyping(){
-  const c=document.getElementById('messages');
+  const ml=getMsgList();
   const d=document.createElement('div');d.className='msg ai';d.id='typ';
-  const av=document.createElement('div');av.className='av ai-av';av.textContent='CH';
+  const av=document.createElement('div');av.className='av ai-av';av.textContent='AI';
   const bu=document.createElement('div');bu.className='bubble';
   bu.innerHTML='<div class="typing-dots"><span></span><span></span><span></span></div>';
-  d.appendChild(av);d.appendChild(bu);c.appendChild(d);c.scrollTop=c.scrollHeight;
+  d.appendChild(av);d.appendChild(bu);ml.appendChild(d);
+  const msgs=document.getElementById('messages');msgs.scrollTop=msgs.scrollHeight;
 }
 function removeTyping(){const t=document.getElementById('typ');if(t)t.remove();}
 
-async function sendMessage(){
-  if(isLoading)return;
-  const inp=document.getElementById('input');
-  const text=inp.value.trim();if(!text)return;
-  inp.value='';inp.style.height='auto';
-  isLoading=true;document.getElementById('sendBtn').disabled=true;
+async function sendMessage(text){
+  if(isLoading||!text)return;
+  clearInput();
+  isLoading=true;
+  const s1=document.getElementById('heroSendBtn');
+  const s2=document.getElementById('chatSendBtn');
+  if(s1)s1.disabled=true;if(s2)s2.disabled=true;
   addMsg('user',text);
   messages.push({role:'user',content:text});
   if(messages.length===1)saveChat(text);
   showTyping();
   try{
     const r=await fetch('/api/chat',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
+      method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:2000,system:SYSTEM,messages})
     });
     const d=await r.json();removeTyping();
@@ -608,12 +777,14 @@ async function sendMessage(){
     removeTyping();
     addMsg('ai','⚠ Connection error. Please check your internet and try again.');
   }
-  isLoading=false;document.getElementById('sendBtn').disabled=false;inp.focus();
+  isLoading=false;
+  if(s1)s1.disabled=false;if(s2)s2.disabled=false;
+  const ci=document.getElementById('chatInput');if(ci)ci.focus();
 }
 
 renderHistory();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-<script>mermaid.initialize({startOnLoad:false,theme:'neutral',flowchart:{htmlLabels:true,curve:'basis',padding:20}});</script>
+<script>mermaid.initialize({startOnLoad:false,theme:'neutral',flowchart:{htmlLabels:true,curve:'basis',padding:24}});</script>
 </body>
 </html>
