@@ -298,12 +298,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 
 /* UPLOAD BUTTON */
 .upload-btn{
-  display:flex;align-items:center;gap:5px;
-  padding:5px 10px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  width:32px;height:32px;border-radius:8px;
   border:1px solid var(--border);background:var(--surface2);
-  cursor:pointer;font-size:11px;font-weight:500;
-  color:var(--text2);transition:all 0.15s;
-  font-family:'DM Sans',sans-serif;
+  cursor:pointer;color:var(--text2);transition:all 0.15s;
+  flex-shrink:0;
 }
 .upload-btn:hover{border-color:var(--border2);color:var(--text);background:var(--surface);}
 .upload-btn-chat{
@@ -378,7 +377,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
         <p class="welcome-sub">Ask anything about AWS, Azure, GCP, Terraform, Kubernetes, Linux or CI/CD — get production-ready answers instantly.</p>
 
         <div class="hero-input-wrap" id="heroInputWrap">
-          <div id="heroFilePreview" style="display:none;padding:8px 10px;background:var(--surface2);border-radius:8px;margin-bottom:10px;border:1px solid var(--border);display:flex;align-items:center;gap:8px;">
+          <div id="heroFilePreview" style="display:none;padding:8px 10px;background:var(--surface2);border-radius:8px;margin-bottom:10px;border:1px solid var(--border);align-items:center;gap:8px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
             <span id="heroFileName" style="font-size:12px;color:var(--text2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
             <button onclick="clearFile('hero')" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:14px;padding:0 2px;">✕</button>
@@ -386,9 +385,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
           <textarea class="hero-textarea" id="heroInput" placeholder="Ask me anything, or upload a PDF to analyze..." rows="1"
             onkeydown="handleHeroKey(event)" oninput="autoResize(this)"></textarea>
           <div class="hero-input-footer">
-            <label for="heroFileInput" class="upload-btn" title="Upload PDF or Image">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
-              Attach
+            <label for="heroFileInput" class="upload-btn" title="Attach file, PDF or image">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             </label>
             <input type="file" id="heroFileInput" accept=".pdf,.txt,.log,image/png,image/jpeg,image/jpg,image/webp,image/gif" style="display:none;" onchange="handleFile(event,'hero')">
             <span class="hero-hint">↵ Enter to send</span>
@@ -413,7 +411,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
     <div class="chat-input-area" id="chatInputArea" style="display:none;">
       <div class="chat-input-inner">
         <div class="chat-input-box">
-          <div id="chatFilePreview" style="display:none;padding:7px 10px;background:var(--surface2);border-radius:8px;margin-bottom:8px;border:1px solid var(--border);display:flex;align-items:center;gap:8px;">
+          <div id="chatFilePreview" style="display:none;padding:7px 10px;background:var(--surface2);border-radius:8px;margin-bottom:8px;border:1px solid var(--border);align-items:center;gap:8px;">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
             <span id="chatFileName" style="font-size:12px;color:var(--text2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
             <button onclick="clearFile('chat')" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:13px;padding:0 2px;">✕</button>
@@ -430,7 +428,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
             </button>
           </div>
         </div>
-        <div class="chat-footer">⚠ Never share credentials, API keys or passwords &nbsp;·&nbsp; CloudevAI &nbsp;·&nbsp; <strong>Built by Anirudh Jagannadh</strong> &nbsp;·&nbsp; May 2026</div>
+        <div class="chat-footer">⚠ Never share credentials, API keys or passwords &nbsp;·&nbsp; CloudevAI &nbsp;·&nbsp; <strong>Built by Anirudh Jagannadh Suravarjula</strong> &nbsp;·&nbsp; May 2026</div>
       </div>
     </div>
   </div>
@@ -487,7 +485,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
         <div class="built-by">
           <div class="built-avatar">AJ</div>
           <div>
-            <div class="built-name">Anirudh Jagannadh</div>
+            <div class="built-name">Anirudh Jagannadh Suravarjula</div>
             <div class="built-role">AWS Cloud Platform Engineer · 11 Years</div>
             <div class="built-note">Built CloudevAI because after 11 years in cloud I still could not find a tool that gave me the right answer with confidence at 2am. So I built it myself.</div>
           </div>
@@ -823,7 +821,7 @@ function handleFile(e,src){
     uploadedFile={name:file.name,type:file.type,data:ev.target.result,isPdf,isImage};
     const prev=document.getElementById(src==='hero'?'heroFilePreview':'chatFilePreview');
     const nm=document.getElementById(src==='hero'?'heroFileName':'chatFileName');
-    if(prev)prev.style.display='flex';
+    if(prev){prev.style.display='flex';}
     if(nm)nm.textContent=(isImage?'🖼️ ':'📄 ')+file.name;
   };
   reader.readAsDataURL(file);
