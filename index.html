@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CloudHelper AI</title>
+<title>CloudevAI — Cloud AI Assistant</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;700&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -12,39 +12,43 @@
   --text:#1a1a18;--text2:#6b6b65;--text3:#9b9b95;--accent:#1a1a18;--accent-fg:#ffffff;
   --user-bubble:#1a1a18;--user-fg:#ffffff;--ai-bubble:#ffffff;--ai-border:#e8e8e4;
   --code-bg:#1a1a18;--code-fg:#e8e8e4;--code-header:#141412;
-  --shadow:0 1px 3px rgba(0,0,0,0.06);--shadow2:0 4px 16px rgba(0,0,0,0.08);
+  --shadow:0 1px 3px rgba(0,0,0,0.06);
 }
 [data-theme="dark"]{
   --bg:#111110;--surface:#1c1c1a;--surface2:#242422;--border:#2e2e2c;--border2:#3a3a38;
   --text:#f0f0ec;--text2:#8a8a84;--text3:#5a5a56;--accent:#f0f0ec;--accent-fg:#111110;
   --user-bubble:#f0f0ec;--user-fg:#111110;--ai-bubble:#1c1c1a;--ai-border:#2e2e2c;
   --code-bg:#0c0c0b;--code-fg:#c8c8c2;--code-header:#090908;
-  --shadow:0 1px 3px rgba(0,0,0,0.3);--shadow2:0 4px 16px rgba(0,0,0,0.4);
+  --shadow:0 1px 3px rgba(0,0,0,0.3);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{height:100%;}
 body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;transition:background 0.3s,color 0.3s;}
+
+/* HEADER */
 .header{height:52px;border-bottom:1px solid var(--border);background:var(--surface);display:flex;align-items:center;padding:0 20px;gap:14px;flex-shrink:0;}
 .logo{width:28px;height:28px;background:var(--text);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .logo svg{width:16px;height:16px;fill:var(--accent-fg);}
 .brand{font-family:'Geist Mono',monospace;font-size:14px;font-weight:600;color:var(--text);letter-spacing:-0.3px;}
 .header-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
-.updated{font-size:11px;color:var(--text3);font-family:'Geist Mono',monospace;}
 .about-btn{padding:5px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;font-size:12px;font-weight:500;color:var(--text2);font-family:'Geist',sans-serif;transition:all 0.2s;}
 .about-btn:hover{background:var(--border);color:var(--text);}
-.theme-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:background 0.2s;}
+.theme-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;}
 .theme-btn:hover{background:var(--border);}
+
+/* LAYOUT */
 .main{display:flex;flex:1;overflow:hidden;}
+
+/* SIDEBAR */
 .sidebar{width:248px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;}
 .sidebar-top{padding:14px 14px 10px;border-bottom:1px solid var(--border);}
-.new-btn{width:100%;padding:8px 12px;background:var(--accent);color:var(--accent-fg);border:none;border-radius:8px;font-family:'Geist',sans-serif;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px;transition:opacity 0.2s;}
+.new-btn{width:100%;padding:8px 12px;background:var(--accent);color:var(--accent-fg);border:none;border-radius:8px;font-family:'Geist',sans-serif;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:opacity 0.2s;}
 .new-btn:hover{opacity:0.85;}
 .new-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;}
-.sidebar-section{padding:10px 14px 4px;}
-.sidebar-label{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:6px;}
+.sidebar-label{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:0.8px;text-transform:uppercase;padding:10px 14px 4px;}
 .history-list{flex:1;overflow-y:auto;padding:4px 8px 8px;}
 .history-empty{padding:20px 8px;text-align:center;font-size:12px;color:var(--text3);line-height:1.6;}
-.history-item{padding:9px 10px;border-radius:7px;cursor:pointer;margin-bottom:2px;transition:background 0.15s;border:1px solid transparent;position:relative;}
+.history-item{padding:9px 10px;border-radius:7px;cursor:pointer;margin-bottom:2px;border:1px solid transparent;position:relative;transition:background 0.15s;}
 .history-item:hover{background:var(--surface2);border-color:var(--border);}
 .history-item.active{background:var(--surface2);border-color:var(--border2);}
 .hi-title{font-size:12px;color:var(--text);font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:16px;}
@@ -52,6 +56,8 @@ body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--text);heigh
 .hi-del{position:absolute;right:8px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:12px;opacity:0;cursor:pointer;padding:2px 4px;border-radius:4px;}
 .history-item:hover .hi-del{opacity:1;}
 .hi-del:hover{color:#ef4444;}
+
+/* CHAT */
 .chat-area{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;}
 .messages{flex:1;padding:24px 28px;overflow-y:auto;display:flex;flex-direction:column;gap:20px;background:var(--bg);}
 .welcome{max-width:480px;margin:40px auto 0;display:flex;flex-direction:column;gap:24px;}
@@ -64,6 +70,8 @@ body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--text);heigh
 .starter:hover{border-color:var(--border2);background:var(--surface2);}
 .starter-icon{font-size:16px;margin-bottom:6px;}
 .starter-text{font-size:12px;color:var(--text2);line-height:1.4;}
+
+/* MESSAGES */
 .msg{display:flex;gap:10px;animation:fadeUp 0.25s ease;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
 .msg.user{flex-direction:row-reverse;}
@@ -74,52 +82,27 @@ body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--text);heigh
 .msg.ai .bubble{background:var(--ai-bubble);border:1px solid var(--ai-border);border-top-left-radius:3px;color:var(--text);box-shadow:var(--shadow);}
 .msg.user .bubble{background:var(--user-bubble);border-top-right-radius:3px;color:var(--user-fg);}
 .bubble strong{font-weight:600;}
+
+/* CODE BLOCKS */
 .code-block{position:relative;margin:10px 0;border-radius:9px;overflow:hidden;border:1px solid var(--border);}
 .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--code-header);}
 .code-lang{font-family:'Geist Mono',monospace;font-size:10px;color:#6b6b65;text-transform:uppercase;letter-spacing:0.6px;}
 .cp-btn{
-  position:absolute;
-  top:8px;
-  right:8px;
-  z-index:10;
-  display:flex;align-items:center;justify-content:center;
-  width:32px;height:32px;
-  border-radius:7px;
-  background:#ffffff;
-  border:1px solid #e0e0dc;
-  color:#6b6b65;
-  cursor:pointer;
-  transition:all 0.15s;
-  flex-shrink:0;
-  box-shadow:0 1px 4px rgba(0,0,0,0.08);
+  position:relative;display:flex;align-items:center;justify-content:center;
+  width:30px;height:30px;border-radius:7px;
+  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);
+  color:#8a8a84;cursor:pointer;transition:all 0.15s;flex-shrink:0;
 }
-.cp-btn:hover{background:#f5f5f3;color:#1a1a18;border-color:#c8c8c4;box-shadow:0 2px 6px rgba(0,0,0,0.12);}
-.cp-btn.ok{background:#ecfdf5;border-color:#6ee7b7;color:#059669;}
-.cp-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;pointer-events:none;flex-shrink:0;}
-.cp-tooltip{
-  position:absolute;
-  top:38px;
-  right:0;
-  background:#1a1a18;
-  color:#ffffff;
-  font-size:11px;
-  font-weight:500;
-  padding:5px 9px;
-  border-radius:6px;
-  white-space:nowrap;
-  opacity:0;
-  pointer-events:none;
-  transition:opacity 0.15s;
-  font-family:'Geist',sans-serif;
-  z-index:100;
-  box-shadow:0 2px 8px rgba(0,0,0,0.25);
-}
+.cp-btn:hover{background:rgba(255,255,255,0.14);color:#ffffff;border-color:rgba(255,255,255,0.22);}
+.cp-btn.ok{background:rgba(34,197,94,0.15);border-color:rgba(34,197,94,0.35);color:#4ade80;}
+.cp-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;pointer-events:none;}
+.cp-tooltip{position:absolute;top:36px;right:0;background:#1a1a18;color:#fff;font-size:11px;font-weight:500;padding:5px 9px;border-radius:6px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.15s;font-family:'Geist',sans-serif;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.25);}
 .cp-btn:hover .cp-tooltip{opacity:1;}
 .cp-btn.ok .cp-tooltip{opacity:1;}
-.code-block pre{margin:0;padding:13px 14px;padding-right:52px;background:var(--code-bg);color:var(--code-fg);font-family:'Geist Mono',monospace;font-size:12px;white-space:pre-wrap;word-break:break-word;line-height:1.7;}
-.cp-btn svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2;}
 .code-block pre{margin:0;padding:13px 14px;background:var(--code-bg);color:var(--code-fg);font-family:'Geist Mono',monospace;font-size:12px;white-space:pre-wrap;word-break:break-word;line-height:1.7;}
 .ic{background:var(--surface2);padding:1px 5px;border-radius:4px;font-family:'Geist Mono',monospace;font-size:12px;color:var(--text2);border:1px solid var(--border);}
+
+/* DIAGRAM */
 .diag-wrap{margin-left:38px;margin-top:10px;max-width:92%;}
 .diag-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);}
 .diag-bar{display:flex;gap:6px;padding:9px 12px;background:var(--surface2);border-bottom:1px solid var(--border);flex-wrap:wrap;align-items:center;}
@@ -129,11 +112,15 @@ body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--text);heigh
 .diag-btn.ok{background:rgba(34,197,94,0.08);border-color:rgba(34,197,94,0.3);color:#16a34a;}
 .diag-btn svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;}
 .diag-content{padding:20px;overflow-x:auto;background:var(--surface);}
+
+/* TYPING */
 .typing-dots{display:flex;gap:4px;padding:4px 0;align-items:center;}
 .typing-dots span{width:5px;height:5px;border-radius:50%;background:var(--text3);animation:td 1.2s infinite;}
 .typing-dots span:nth-child(2){animation-delay:0.2s;}
 .typing-dots span:nth-child(3){animation-delay:0.4s;}
 @keyframes td{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-5px);}}
+
+/* BOTTOM */
 .bottom{background:var(--surface);border-top:1px solid var(--border);}
 .notice{text-align:center;font-size:10px;color:var(--text3);padding:6px 24px;border-bottom:1px solid var(--border);font-family:'Geist Mono',monospace;}
 .input-row{padding:12px 16px;display:flex;gap:10px;align-items:flex-end;}
@@ -159,8 +146,6 @@ textarea::placeholder{color:var(--text3);}
 .modal-close:hover{background:var(--border);}
 .modal-body{padding:24px;}
 .about-hero{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:20px;text-align:center;}
-.about-logo{width:48px;height:48px;background:var(--text);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
-.about-logo svg{width:26px;height:26px;fill:var(--accent-fg);}
 .about-tagline{font-size:20px;font-weight:600;color:var(--text);margin-bottom:10px;line-height:1.3;}
 .about-desc{font-size:13px;color:var(--text2);line-height:1.7;}
 .about-section{margin-bottom:22px;}
@@ -179,8 +164,7 @@ textarea::placeholder{color:var(--text3);}
 .built-avatar{width:40px;height:40px;background:var(--text);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--accent-fg);font-family:'Geist Mono',monospace;flex-shrink:0;}
 .built-name{font-size:14px;font-weight:600;color:var(--text);}
 .built-note{font-size:11px;color:var(--text2);margin-top:6px;line-height:1.5;}
-.accuracy-grid{display:grid;grid-template-columns:1fr;gap:6px;}
-.accuracy-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;}
+.accuracy-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;}
 .accuracy-icon{font-size:14px;flex-shrink:0;margin-top:1px;}
 .accuracy-text{font-size:12px;color:var(--text2);line-height:1.5;}
 .accuracy-text strong{color:var(--text);font-weight:500;}
@@ -190,14 +174,12 @@ textarea::placeholder{color:var(--text3);}
 </style>
 </head>
 <body>
-
 <div class="header">
   <div class="logo">
     <svg viewBox="0 0 24 24"><path d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
   </div>
-  <span class="brand">CloudHelper AI</span>
+  <span class="brand">CloudevAI</span>
   <div class="header-right">
-    <span class="updated">Apr 2026</span>
     <button class="about-btn" onclick="openAbout()">About</button>
     <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
   </div>
@@ -211,7 +193,7 @@ textarea::placeholder{color:var(--text3);}
         New conversation
       </button>
     </div>
-    <div class="sidebar-section"><div class="sidebar-label">History</div></div>
+    <div class="sidebar-label">History</div>
     <div class="history-list" id="historyList">
       <div class="history-empty" id="historyEmpty">No conversations yet.<br/>Start by asking a question.</div>
     </div>
@@ -247,7 +229,7 @@ textarea::placeholder{color:var(--text3);}
           <svg viewBox="0 0 24 24"><path d="M2 21L23 12 2 3v7l15 2-15 2z"/></svg>
         </button>
       </div>
-      <div class="foot">CloudHelper AI &nbsp;·&nbsp; Not affiliated with any cloud provider &nbsp;·&nbsp; <strong>Built by Anirudh Jagannadh</strong></div>
+      <div class="foot">CloudevAI &nbsp;·&nbsp; Not affiliated with any cloud provider &nbsp;·&nbsp; <strong>Built by Anirudh Jagannadh</strong> &nbsp;·&nbsp; May 2026</div>
     </div>
   </div>
 </div>
@@ -256,21 +238,19 @@ textarea::placeholder{color:var(--text3);}
 <div class="modal-overlay" id="aboutModal" onclick="closeAboutOutside(event)">
   <div class="modal">
     <div class="modal-header">
-      <span class="modal-title">About CloudHelper AI</span>
+      <span class="modal-title">About CloudevAI</span>
       <button class="modal-close" onclick="closeAbout()">✕</button>
     </div>
     <div class="modal-body">
-
       <div class="about-hero">
-        <div class="about-logo">
-          <svg viewBox="0 0 24 24"><path d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
+        <div style="width:48px;height:48px;background:var(--text);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="var(--accent-fg)"><path d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
         </div>
         <div style="display:inline-block;padding:4px 12px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:10px;font-weight:600;color:var(--text3);letter-spacing:0.8px;text-transform:uppercase;font-family:'Geist Mono',monospace;margin-bottom:14px;">Beta — Free to use</div>
-        <div class="about-tagline">Your cloud problems,<br/>solved in seconds.</div>
-        <p class="about-desc" style="margin-top:12px;">CloudHelper AI is a specialist AI built exclusively for cloud engineers and DevOps teams. Not a general tool. A dedicated cloud expert — available 24/7, completely free — that speaks your language and gets straight to the answer.</p>
-        <p class="about-desc" style="margin-top:10px;">Debugging a failed deployment. Designing an architecture. Cutting your cloud bill. Writing Terraform from scratch. Whatever you are facing — you get expert answers instantly, with copy-ready commands and zero fluff.</p>
+        <div class="about-tagline">Production-Ready Cloud Decisions<br/>at 2am, Under Pressure, When It Matters Most.</div>
+        <p class="about-desc" style="margin-top:12px;">CloudevAI is a specialist AI assistant built exclusively for cloud engineers and DevOps teams. Not a general tool. A dedicated cloud expert — available 24/7, completely free — that speaks your language and gets straight to the answer.</p>
         <div style="margin-top:16px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
-          <span style="padding:5px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--text2);">☁️ Multi-cloud</span>
+          <span style="padding:5px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--text2);">☁️ AWS · Azure · GCP</span>
           <span style="padding:5px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--text2);">🏗️ Architecture diagrams</span>
           <span style="padding:5px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--text2);">⚙️ Terraform & IaC</span>
           <span style="padding:5px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--text2);">🔒 Security first</span>
@@ -280,39 +260,26 @@ textarea::placeholder{color:var(--text3);}
 
       <div class="about-section">
         <div class="about-section-title">Why Specialist Beats Generalist</div>
-        <p style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.8;">General AI tools are brilliant — they know everything about everything. CloudHelper AI makes a different choice. It knows everything about cloud — and delivers it in a way that saves you time every single day.</p>
-        <div class="diff-grid" style="margin-bottom:12px;">
-          <div class="diff-card" style="grid-column:span 2;display:flex;gap:16px;align-items:flex-start;">
-            <div style="font-size:28px;flex-shrink:0;">💬</div>
-            <div>
-              <div class="diff-title" style="margin-bottom:6px;">Ask the same question. Get a different experience.</div>
-              <div class="diff-desc" style="font-size:12px;line-height:1.7;">When you ask a general AI a cloud question, you get a general answer. When you ask CloudHelper AI, you get structured steps, copy-ready CLI commands, security warnings, official documentation links and — if needed — an architecture diagram. All in one response. Every time.</div>
-            </div>
-          </div>
-        </div>
         <div class="diff-grid">
-          <div class="diff-card"><div class="diff-icon">🎯</div><div class="diff-title">Structured Every Time</div><div class="diff-desc">Every answer follows the same professional format — problem, solution, commands, warnings and references. No guessing what format you will get.</div></div>
-          <div class="diff-card"><div class="diff-icon">💻</div><div class="diff-title">Copy With One Click</div><div class="diff-desc">Every CLI command has its own copy button. AWS, Azure, GCP, Terraform, Docker, Kubectl — labelled and ready to paste directly into your terminal.</div></div>
-          <div class="diff-card"><div class="diff-icon">🏗️</div><div class="diff-title">Diagrams On Demand</div><div class="diff-desc">Ask for any architecture, CI/CD pipeline or infrastructure flow — get a professional diagram you can edit, download or share instantly.</div></div>
-          <div class="diff-card"><div class="diff-icon">🔒</div><div class="diff-title">Security Baked In</div><div class="diff-desc">Security warnings are included in every relevant answer. If you accidentally share credentials, you get an immediate alert to rotate them.</div></div>
-          <div class="diff-card"><div class="diff-icon">📋</div><div class="diff-title">Any Format You Need</div><div class="diff-desc">Need Console steps, CLI commands, Terraform code or Python SDK? Just ask — you get the answer in exactly the format you work with.</div></div>
-          <div class="diff-card"><div class="diff-icon">☁️</div><div class="diff-title">All 3 Clouds</div><div class="diff-desc">AWS, Azure and GCP all in one place. Troubleshoot, compare and build across every major cloud platform without switching tools.</div></div>
+          <div class="diff-card"><div class="diff-icon">🎯</div><div class="diff-title">Structured Every Time</div><div class="diff-desc">Every answer follows the same professional format — problem, solution, commands, warnings and references.</div></div>
+          <div class="diff-card"><div class="diff-icon">💻</div><div class="diff-title">Copy With One Click</div><div class="diff-desc">Every CLI command has its own copy button. AWS, Azure, GCP, Terraform, Docker, Kubectl — ready to paste.</div></div>
+          <div class="diff-card"><div class="diff-icon">🏗️</div><div class="diff-title">Diagrams On Demand</div><div class="diff-desc">Ask for any architecture, CI/CD pipeline or infrastructure flow — get a professional diagram instantly.</div></div>
+          <div class="diff-card"><div class="diff-icon">🔒</div><div class="diff-title">Security Baked In</div><div class="diff-desc">Security warnings included in every relevant answer. Credential exposure alerts built into the foundation.</div></div>
+          <div class="diff-card"><div class="diff-icon">📋</div><div class="diff-title">Any Format You Need</div><div class="diff-desc">Console steps, CLI commands, Terraform code or Python SDK — just ask for the format you need.</div></div>
+          <div class="diff-card"><div class="diff-icon">☁️</div><div class="diff-title">All 3 Clouds</div><div class="diff-desc">AWS, Azure and GCP all in one place. Troubleshoot, compare and build across every major platform.</div></div>
         </div>
         <div style="margin-top:14px;padding:16px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;">
           <p style="font-size:13px;color:var(--text);font-weight:500;margin-bottom:6px;">The right tool for the right job.</p>
-          <p style="font-size:12px;color:var(--text2);line-height:1.7;">A surgeon and a general practitioner are both doctors. You would not go to a GP for open heart surgery. CloudHelper AI is the specialist in the room — built exclusively for cloud engineers who want fast, accurate, production-ready answers without the noise.</p>
+          <p style="font-size:12px;color:var(--text2);line-height:1.7;">A surgeon and a GP are both doctors. You would not go to a GP for open heart surgery. CloudevAI is the specialist — built exclusively for cloud engineers who want fast, accurate, production-ready answers without the noise.</p>
         </div>
       </div>
 
       <div class="about-section">
         <div class="about-section-title">How We Ensure Accuracy</div>
-        <div class="accuracy-grid">
-          <div class="accuracy-item"><div class="accuracy-icon">🤖</div><div class="accuracy-text"><strong>Powered by Claude AI (Anthropic)</strong> — trained on official cloud documentation, technical literature and real-world engineering knowledge.</div></div>
-          <div class="accuracy-item"><div class="accuracy-icon">📚</div><div class="accuracy-text"><strong>Every answer references official docs</strong> — links to AWS, Azure and GCP documentation are always included so you can verify independently.</div></div>
-          <div class="accuracy-item"><div class="accuracy-icon">🏗️</div><div class="accuracy-text"><strong>Follows industry frameworks</strong> — answers align with AWS Well-Architected Framework, Azure Security Benchmark and GCP Best Practices.</div></div>
-          <div class="accuracy-item"><div class="accuracy-icon">❓</div><div class="accuracy-text"><strong>Honest when uncertain</strong> — if the answer requires more context, CloudHelper AI asks clarifying questions rather than guessing.</div></div>
-          <div class="accuracy-item"><div class="accuracy-icon">⚠️</div><div class="accuracy-text"><strong>Always verify in non-production</strong> — every complex answer reminds you to test before applying to production environments.</div></div>
-        </div>
+        <div class="accuracy-item"><div class="accuracy-icon">🤖</div><div class="accuracy-text"><strong>Powered by Claude AI (Anthropic)</strong> — trained on official cloud documentation, technical literature and real-world engineering knowledge.</div></div>
+        <div class="accuracy-item"><div class="accuracy-icon">📚</div><div class="accuracy-text"><strong>Every answer references official docs</strong> — links to AWS, Azure and GCP documentation so you can verify independently.</div></div>
+        <div class="accuracy-item"><div class="accuracy-icon">❓</div><div class="accuracy-text"><strong>Honest when uncertain</strong> — if the answer requires more context, CloudevAI asks clarifying questions rather than guessing.</div></div>
+        <div class="accuracy-item"><div class="accuracy-icon">⚠️</div><div class="accuracy-text"><strong>Always verify in non-production</strong> — every complex answer reminds you to test before applying to production environments.</div></div>
       </div>
 
       <div class="about-section">
@@ -330,7 +297,7 @@ textarea::placeholder{color:var(--text3);}
           <div class="built-avatar">AJ</div>
           <div>
             <div class="built-name">Anirudh Jagannadh</div>
-            <div class="built-note">CloudHelper AI was built with one simple belief — every cloud engineer deserves instant, expert-level answers without waiting for support tickets, reading endless documentation, or paying for expensive consultants.</div>
+            <div class="built-note">AWS Cloud Platform Engineer with 11 years of experience. Built CloudevAI because after a decade in the cloud — I still could not find a tool that gave me the right answer with confidence. So I built it myself.</div>
           </div>
         </div>
       </div>
@@ -338,20 +305,17 @@ textarea::placeholder{color:var(--text3);}
       <div class="cta-box">
         <div style="font-size:22px;margin-bottom:10px;">🙌</div>
         <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:8px;">Currently in Beta — Shaping the future together</div>
-        <p style="font-size:12px;color:var(--text2);line-height:1.7;max-width:380px;margin:0 auto 16px;">This tool is free and actively being improved. Your feedback directly shapes what gets built next. If something is wrong, unclear or missing — we want to know.</p>
+        <p style="font-size:12px;color:var(--text2);line-height:1.7;max-width:380px;margin:0 auto 16px;">This tool is free and actively being improved. Your feedback directly shapes what gets built next.</p>
         <div style="display:inline-block;padding:9px 22px;background:var(--text);color:var(--accent-fg);border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;" onclick="closeAbout()">Try it now — it is free</div>
       </div>
 
-      <div class="disclaimer-box">
-        ⚠ CloudHelper AI is an independent educational tool currently in beta. Not affiliated with, endorsed by or officially connected to Amazon Web Services, Microsoft Azure or Google Cloud Platform. All guidance is for educational purposes only. Always verify with official documentation before implementing in production environments.
-      </div>
-
+      <div class="disclaimer-box">⚠ CloudevAI is an independent educational tool currently in beta. Not affiliated with, endorsed by or officially connected to Amazon Web Services, Microsoft Azure or Google Cloud Platform. All guidance is for educational purposes only. Always verify with official documentation before implementing in production environments.</div>
     </div>
   </div>
 </div>
 
 <script>
-const SYSTEM=`You are CloudHelper AI, an expert cloud architect and DevOps engineer. Built by Anirudh Jagannadh.
+const SYSTEM=`You are CloudevAI, an expert cloud architect and DevOps engineer with 11 years of experience. Built by Anirudh Jagannadh.
 
 You specialize in:
 - AWS, Microsoft Azure, and Google Cloud Platform (GCP)
@@ -367,80 +331,56 @@ You specialize in:
 BEHAVIOR:
 - Provide accurate, practical, real-world solutions
 - Keep answers clear, structured, and easy to follow
-- Prefer step-by-step guidance when needed
 - Adapt depth based on user level
 - If unclear, ask 1-2 concise clarifying questions
 - Avoid unnecessary verbosity
 
-GUIDELINES:
-- Prioritize correctness over completeness
-- Include security and cost considerations when relevant
-- Do not guess — ask for clarification if unsure
-- Always mention which platform a command belongs to
-
 FORMAT RULE:
-Always match the format to what the user asks for:
-- If user asks for Console steps — give UI click-by-click steps
-- If user asks for CLI — give CLI commands
-- If user asks for Terraform or IaC — give Terraform code
-- If user asks for Python/SDK — give SDK code
-- If user does not specify — give CLI as default AND add at the end:
-  "Need this as Console steps, Terraform or Python SDK instead? Just ask!"
+Match format to what user asks:
+- Console steps if user asks for UI steps
+- CLI if user asks for commands
+- Terraform if user asks for IaC
+- Python/SDK if user asks for code
+- Default to CLI and offer alternatives at end
 
-SCOPE: Answer questions about cloud, DevOps, infrastructure, networking, Linux, CI/CD, containers, IaC, monitoring, security, shell scripting and related tooling.
-If asked something completely unrelated say: "I specialize in cloud and DevOps topics only. Happy to help with any infrastructure question!"
+SCOPE: Cloud, DevOps, infrastructure, networking, Linux, CI/CD, containers, IaC, monitoring, security and related tooling only.
+If asked something unrelated say: "I specialize in cloud and DevOps topics only. Happy to help with any infrastructure question!"
 
 SECURITY RULE: If anyone shares API keys, secrets, passwords or credentials respond immediately:
 "🚨 SECURITY ALERT: Sensitive credentials detected. Please rotate these immediately. Never share credentials in chat tools."
 
-DIAGRAM RULE: When user asks for any diagram, architecture, flowchart or visual — generate a Mermaid diagram.
-
-CRITICAL MERMAID RULES — follow exactly or diagram will break:
-- For architecture/infrastructure: ALWAYS use graph TD or graph LR
-- For CI/CD pipelines: ALWAYS use graph LR (NOT sequenceDiagram — it breaks)
-- For workflows: use graph TD
-- For sequences: use graph LR with labeled arrows
-
-NEVER use these — they cause syntax errors:
-- sequenceDiagram (too complex — avoid completely)
-- stateDiagram-v2 (avoid)
-- Special characters like : ; " in node labels
-- Spaces in node IDs — use underscore e.g. Load_Balancer not Load Balancer
-- Parentheses in labels unless using correct bracket type
-
-SAFE MERMAID TEMPLATE — always follow this exact format:
-graph TD
-    A[Short Label] --> B[Short Label]
-    B --> C[Short Label]
-    C --> D[(Database)]
-    style A fill:#374151,stroke:#1f2937,color:#fff
-    style B fill:#4b5563,stroke:#374151,color:#fff
-    style C fill:#6b7280,stroke:#4b5563,color:#fff
-    style D fill:#1f2937,stroke:#111827,color:#fff
-
-BRACKET TYPES:
-- [Text] for services and components
-- [(Text)] for databases and storage
-- {Text} for decisions
-- (Text) for processes
-- Keep ALL labels under 3 words
-- Use underscore for spaces in node IDs
+DIAGRAM RULE: When user asks for any diagram — generate Mermaid:
+- Architecture: graph TD or graph LR only
+- CI/CD: graph LR only
+- Never use sequenceDiagram or stateDiagram
 
 Wrap ALL diagrams like this:
 <diagram>
-MERMAID CODE ONLY — NO COMMENTS NO EXTRA TEXT
+graph TD
+    A[Component] --> B[Component]
+    style A fill:#374151,stroke:#1f2937,color:#fff
+    style B fill:#4b5563,stroke:#374151,color:#fff
 </diagram>
 
-CLI COMMAND RULE: Wrap EVERY command in triple backticks with the correct label:
-- \`\`\`aws for AWS CLI
-- \`\`\`az for Azure CLI
-- \`\`\`gcloud for GCP CLI
-- \`\`\`terraform for Terraform
-- \`\`\`kubectl for Kubernetes
-- \`\`\`docker for Docker
-- \`\`\`bash for Linux/Shell
-- \`\`\`powershell for PowerShell
-- \`\`\`python for Python SDK
+MERMAID RULES:
+- ONLY use graph TD or graph LR
+- Keep ALL node labels under 3 words
+- NO special characters in labels
+- NO parentheses in node text
+- Use underscore for spaces in IDs
+- Always add style for every node
+- Colors: servers #374151, storage #4b5563, network #6b7280, security #1f2937, users #9ca3af
+
+CLI COMMAND RULE: Wrap EVERY command in triple backticks with label:
+- aws for AWS CLI
+- az for Azure CLI  
+- gcloud for GCP CLI
+- terraform for Terraform
+- kubectl for Kubernetes
+- docker for Docker
+- bash for Linux/Shell
+- powershell for PowerShell
+- python for Python SDK
 
 RESPONSE FORMAT:
 🔍 PROBLEM UNDERSTOOD: [brief restatement]
@@ -449,10 +389,10 @@ RESPONSE FORMAT:
 ⚠️ IMPORTANT NOTES: [security, cost, warnings]
 📚 OFFICIAL REFERENCE: [docs link]
 
-Do NOT add any disclaimer or signature at the end of answers. Keep answers clean and professional.`;
+Do NOT add any disclaimer at the end of answers.`;
 
 let messages=[],isLoading=false;
-let chatHistory=JSON.parse(localStorage.getItem('ch3History')||'[]');
+let chatHistory=JSON.parse(localStorage.getItem('cv2History')||'[]');
 let currentId=null,diagN=0,cpN=0;
 
 function toggleTheme(){
@@ -460,13 +400,14 @@ function toggleTheme(){
   const d=h.getAttribute('data-theme')==='dark';
   h.setAttribute('data-theme',d?'light':'dark');
   document.getElementById('themeBtn').textContent=d?'🌙':'☀️';
-  localStorage.setItem('ch3Theme',d?'light':'dark');
+  localStorage.setItem('cv2Theme',d?'light':'dark');
 }
 (function(){
-  const t=localStorage.getItem('ch3Theme')||'light';
+  const t=localStorage.getItem('cv2Theme')||'light';
   document.documentElement.setAttribute('data-theme',t);
   document.addEventListener('DOMContentLoaded',()=>{
-    document.getElementById('themeBtn').textContent=t==='dark'?'☀️':'🌙';
+    const btn=document.getElementById('themeBtn');
+    if(btn)btn.textContent=t==='dark'?'☀️':'🌙';
   });
 })();
 
@@ -497,7 +438,7 @@ function saveChat(first){
     chatHistory.push({id:currentId,title:first.length>38?first.slice(0,38)+'…':first,time:now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),messages:[]});
   }
   const c=chatHistory.find(x=>x.id===currentId);
-  if(c){c.messages=[...messages];localStorage.setItem('ch3History',JSON.stringify(chatHistory));}
+  if(c){c.messages=[...messages];localStorage.setItem('cv2History',JSON.stringify(chatHistory));}
   renderHistory();
 }
 
@@ -513,7 +454,7 @@ function loadChat(id){
 function delChat(id,e){
   e.stopPropagation();
   chatHistory=chatHistory.filter(c=>c.id!==id);
-  localStorage.setItem('ch3History',JSON.stringify(chatHistory));
+  localStorage.setItem('cv2History',JSON.stringify(chatHistory));
   if(currentId===id)goHome();else renderHistory();
 }
 
@@ -543,10 +484,7 @@ function copyText(text,id){
     const tt=document.getElementById('tt-'+id);
     if(tt)tt.textContent='Copied!';
     b.classList.add('ok');
-    setTimeout(()=>{
-      b.classList.remove('ok');
-      if(tt)tt.textContent='Copy';
-    },2000);
+    setTimeout(()=>{b.classList.remove('ok');if(tt)tt.textContent='Copy';},2000);
   });
 }
 
@@ -563,7 +501,7 @@ function formatMsg(text){
     const label=labels[lang.toLowerCase()]||(lang?lang.toUpperCase():'Command');
     const esc=code.replace(/</g,'&lt;').replace(/>/g,'&gt;');
     const raw=code.replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$');
-    return `<div class="code-block"><div class="code-head"><span class="code-lang">${label}</span></div><button class="cp-btn" id="${bid}" onclick="copyText(\`${raw}\`,\'${bid}\')"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="cp-tooltip" id="tt-${bid}">Copy</span></button><pre>${esc.trim()}</pre></div>`;
+    return `<div class="code-block"><div class="code-head"><span class="code-lang">${label}</span><button class="cp-btn" id="${bid}" onclick="copyText(\`${raw}\`,\'${bid}\')"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="cp-tooltip" id="tt-${bid}">Copy</span></button></div><pre>${esc.trim()}</pre></div>`;
   });
   text=text.replace(/`([^`]+)`/g,'<span class="ic">$1</span>');
   text=text.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
@@ -584,12 +522,17 @@ function makeDiagram(code){
   const content=document.createElement('div');content.className='diag-content';content.setAttribute('data-m',code);
   const md=document.createElement('div');md.className='mermaid';md.textContent=code;
   content.appendChild(md);box.appendChild(bar);box.appendChild(content);wrap.appendChild(box);
-  setTimeout(()=>{if(window.mermaid){try{mermaid.init(undefined,md);}catch(e){
-    md.innerHTML=`<div style="padding:20px;text-align:center;">
-      <div style="font-size:13px;color:var(--text2);margin-bottom:12px;">⚠️ Diagram could not render automatically.</div>
-      <div style="font-size:12px;color:var(--text3);margin-bottom:14px;">Click <strong>Edit</strong> to open and view the diagram in Mermaid Live Editor.</div>
-    </div>`;
-  }}},700);
+  setTimeout(()=>{
+    if(window.mermaid){
+      try{mermaid.init(undefined,md);}
+      catch(e){
+        md.innerHTML=`<div style="padding:20px;text-align:center;">
+          <div style="font-size:13px;color:var(--text2);margin-bottom:12px;">⚠️ Diagram could not render automatically.</div>
+          <div style="font-size:12px;color:var(--text3);">Click <strong>Edit</strong> to view and edit in Mermaid Live Editor.</div>
+        </div>`;
+      }
+    }
+  },700);
   return wrap;
 }
 
@@ -651,7 +594,7 @@ async function sendMessage(){
   if(messages.length===1)saveChat(text);
   showTyping();
   try{
-    const r=await fetch('/.netlify/functions/chat',{
+    const r=await fetch('/api/chat',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:2000,system:SYSTEM,messages})
@@ -671,6 +614,6 @@ async function sendMessage(){
 renderHistory();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-<script>mermaid.initialize({startOnLoad:false,theme:'neutral',flowchart:{htmlLabels:true,curve:'basis',padding:20},sequence:{actorMargin:80}});</script>
+<script>mermaid.initialize({startOnLoad:false,theme:'neutral',flowchart:{htmlLabels:true,curve:'basis',padding:20}});</script>
 </body>
 </html>
