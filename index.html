@@ -428,7 +428,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
             </button>
           </div>
         </div>
-        <div class="chat-footer">⚠ Never share credentials, API keys or passwords &nbsp;·&nbsp; CloudevAI &nbsp;·&nbsp; <strong>Built by Anirudh Jagannadh Suravarjula</strong> &nbsp;·&nbsp; May 2026</div>
+        <div class="chat-footer">⚠ Never share credentials, API keys or passwords &nbsp;·&nbsp; CloudevAI &nbsp;·&nbsp; <strong>Built by Anirudh</strong> &nbsp;·&nbsp; May 2026</div>
       </div>
     </div>
   </div>
@@ -442,205 +442,193 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
       <button class="modal-close" onclick="closeAbout()">✕</button>
     </div>
     <div class="modal-body">
+
+      <!-- HERO -->
       <div class="about-hero">
         <div style="display:inline-block;padding:5px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:10px;font-weight:600;color:var(--text3);letter-spacing:0.8px;text-transform:uppercase;font-family:'DM Mono',monospace;margin-bottom:16px;">Beta — Free to use</div>
-        <div class="about-tagline">Production-Ready Cloud Decisions<br/>at 2am, Under Pressure.</div>
-        <p class="about-desc" style="margin-top:12px;">CloudevAI is a specialist AI assistant built exclusively for cloud engineers. Not a general tool. A dedicated cloud expert built by an 11-year AWS platform engineer who got frustrated with tools that gave general answers to production problems.</p>
+        <div class="about-tagline">The AI Decision Layer<br/>for Cloud Engineering Teams.</div>
+        <p class="about-desc" style="margin-top:12px;">CloudevAI is not a general AI tool with cloud knowledge. It is a specialist decision-making system built exclusively for cloud engineers — delivering structured, production-safe answers with confidence scoring, root cause analysis and instant architecture insights.</p>
         <div style="margin-top:16px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
           <span style="padding:5px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--text2);">☁️ AWS · Azure · GCP</span>
-          <span style="padding:5px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--text2);">🏗️ Architecture diagrams</span>
+          <span style="padding:5px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--text2);">🏗️ Architecture analysis</span>
           <span style="padding:5px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--text2);">⚙️ Terraform & IaC</span>
           <span style="padding:5px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--text2);">🔒 Security first</span>
+          <span style="padding:5px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--text2);">📎 Upload PDFs & screenshots</span>
         </div>
       </div>
 
+      <!-- COMPARE SECTION -->
       <div class="about-section">
-        <div class="about-section-title">Why CloudevAI</div>
+        <div class="about-section-title">CloudevAI vs General AI — Same Question</div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+          <div style="padding:12px 16px;border-bottom:1px solid var(--border);font-size:12px;font-weight:500;color:var(--text2);">
+            Question asked: <span style="color:var(--text);font-family:'DM Mono',monospace;">"My S3 bucket is giving 403 errors"</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;">
+            <!-- ChatGPT -->
+            <div style="padding:14px 16px;border-right:1px solid var(--border);">
+              <div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px;">ChatGPT / General AI</div>
+              <div style="font-size:12px;color:var(--text2);line-height:1.8;">
+                "There are several possible causes for an S3 403 error. Here are some things to check:<br/><br/>
+                1. Check your bucket policy<br/>
+                2. Verify IAM permissions<br/>
+                3. Check if public access is blocked<br/>
+                4. Verify your credentials<br/>
+                5. Check the object ACL..."
+              </div>
+              <div style="margin-top:12px;padding:8px 10px;background:var(--border);border-radius:6px;font-size:11px;color:var(--text3);">❌ 5 equal possibilities — no diagnosis<br/>❌ No confidence — engineer still guessing<br/>❌ No commands — manual search required</div>
+            </div>
+            <!-- CloudevAI -->
+            <div style="padding:14px 16px;">
+              <div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px;">CloudevAI</div>
+              <div style="font-size:12px;color:var(--text);line-height:1.8;">
+                <strong>Most Likely (75%):</strong> Missing s3:GetObject in bucket policy — not IAM<br/><br/>
+                🚨 Fix in 90 seconds:<br/>
+                <span style="font-family:'DM Mono',monospace;font-size:11px;background:var(--surface);border:1px solid var(--border);padding:2px 6px;border-radius:4px;">aws s3api get-bucket-policy</span><br/><br/>
+                💡 403 from S3 = permission evaluated and DENIED. Check bucket policy before IAM — it is evaluated first.
+              </div>
+              <div style="margin-top:12px;padding:8px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;font-size:11px;color:var(--text2);">✅ Immediate diagnosis with confidence %<br/>✅ Copy-ready command in 90 seconds<br/>✅ Explains WHY — not just what</div>
+            </div>
+          </div>
+        </div>
+      </div>
+        <div class="about-section-title">The Problem We Solve</div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px 18px;">
+          <p style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:12px;">Cloud engineering does not suffer from a lack of answers. It suffers from too many — and no reliable way to know which one is right under pressure.</p>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;gap:10px;font-size:12.5px;"><span style="color:var(--text3);flex-shrink:0;">—</span><span style="color:var(--text);">Engineers waste hours validating generic AI answers before executing on live systems</span></div>
+            <div style="display:flex;gap:10px;font-size:12.5px;"><span style="color:var(--text3);flex-shrink:0;">—</span><span style="color:var(--text);">Sensitive infrastructure data is being pasted into public AI tools without security awareness</span></div>
+            <div style="display:flex;gap:10px;font-size:12.5px;"><span style="color:var(--text3);flex-shrink:0;">—</span><span style="color:var(--text);">General AI tools give confident answers to cloud questions without production-safe context</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- THE SOLUTION -->
+      <div class="about-section">
+        <div class="about-section-title">What Makes CloudevAI Different</div>
         <div class="diff-grid">
-          <div class="diff-card"><div class="diff-icon">🎯</div><div class="diff-title">Structured Every Time</div><div class="diff-desc">Every answer follows the same format — problem, solution, commands, warnings, references. Consistent under pressure.</div></div>
-          <div class="diff-card"><div class="diff-icon">💻</div><div class="diff-title">Copy With One Click</div><div class="diff-desc">Every CLI command has its own copy button. AWS, Azure, GCP, Terraform, Docker, Kubectl — one click to terminal.</div></div>
-          <div class="diff-card"><div class="diff-icon">🏗️</div><div class="diff-title">Diagrams On Demand</div><div class="diff-desc">Ask for any architecture or CI/CD flow — get a professional diagram you can edit, download and share.</div></div>
-          <div class="diff-card"><div class="diff-icon">🔒</div><div class="diff-title">Security Baked In</div><div class="diff-desc">Credential exposure alerts built in from the foundation. Security is not a feature — it is the architecture.</div></div>
+          <div class="diff-card">
+            <div class="diff-icon">🎯</div>
+            <div class="diff-title">Confidence Scoring</div>
+            <div class="diff-desc">Every diagnosis includes root cause confidence — Most Likely 70%, Possible 20%, Low 10%. Engineers act with certainty, not guesswork.</div>
+          </div>
+          <div class="diff-card">
+            <div class="diff-icon">🚨</div>
+            <div class="diff-title">2-Minute Emergency Plan</div>
+            <div class="diff-desc">For production incidents, the first output is always the 3 most critical checks — not a 5-phase investigation. Speed matters at 2am.</div>
+          </div>
+          <div class="diff-card">
+            <div class="diff-icon">🌳</div>
+            <div class="diff-title">Decision Tree Logic</div>
+            <div class="diff-desc">IF Redis evictions &gt; 0 → increase memory. ELSE → check DB slow queries. Not checklists — actual diagnostic reasoning.</div>
+          </div>
+          <div class="diff-card">
+            <div class="diff-icon">🔒</div>
+            <div class="diff-title">Security by Default</div>
+            <div class="diff-desc">Credential exposure alerts, security risk scoring and safe usage guidance built into the foundation — not added as an afterthought.</div>
+          </div>
+          <div class="diff-card">
+            <div class="diff-icon">📎</div>
+            <div class="diff-title">Upload & Analyze</div>
+            <div class="diff-desc">Upload architecture PDFs, AWS console screenshots or error logs. Get instant specific analysis — not generic assumptions.</div>
+          </div>
+          <div class="diff-card">
+            <div class="diff-icon">⚡</div>
+            <div class="diff-title">Instant Assumption Mode</div>
+            <div class="diff-desc">Even with zero data provided — delivers immediate value based on typical patterns. Then refines with your specific details.</div>
+          </div>
         </div>
       </div>
 
+      <!-- MARKET -->
       <div class="about-section">
-        <div class="about-section-title">How We Ensure Accuracy</div>
-        <div class="accuracy-item"><div class="accuracy-icon">🤖</div><div class="accuracy-text"><strong>Powered by Claude AI (Anthropic)</strong> — trained on official cloud documentation and real-world engineering knowledge.</div></div>
-        <div class="accuracy-item"><div class="accuracy-icon">📚</div><div class="accuracy-text"><strong>References official documentation</strong> — links to AWS, Azure and GCP docs so you can verify independently.</div></div>
-        <div class="accuracy-item"><div class="accuracy-icon">⚠️</div><div class="accuracy-text"><strong>Always verify in non-production</strong> — every complex answer includes a reminder to test before applying to production.</div></div>
-      </div>
-
-      <div class="about-section">
-        <div class="about-section-title">Who Is This For</div>
-        <div class="who-grid">
-          <div class="who-card"><div class="who-icon">👩‍💻</div><div class="who-label">Cloud Engineers</div><div class="who-desc">Production answers under pressure</div></div>
-          <div class="who-card"><div class="who-icon">⚙️</div><div class="who-label">DevOps Teams</div><div class="who-desc">Architecture and pipeline design</div></div>
-          <div class="who-card"><div class="who-icon">🚀</div><div class="who-label">Startups</div><div class="who-desc">Cost optimization and best practices</div></div>
+        <div class="about-section-title">The Opportunity</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;">
+            <div style="font-size:20px;font-weight:600;color:var(--text);font-family:'DM Mono',monospace;">$1T+</div>
+            <div style="font-size:11px;color:var(--text2);margin-top:4px;line-height:1.5;">Global cloud infrastructure market in 2026</div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;">
+            <div style="font-size:20px;font-weight:600;color:var(--text);font-family:'DM Mono',monospace;">35M+</div>
+            <div style="font-size:11px;color:var(--text2);margin-top:4px;line-height:1.5;">Cloud engineers and DevOps professionals globally</div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;">
+            <div style="font-size:20px;font-weight:600;color:var(--text);font-family:'DM Mono',monospace;">30min</div>
+            <div style="font-size:11px;color:var(--text2);margin-top:4px;line-height:1.5;">Average time saved per engineer per incident</div>
+          </div>
         </div>
       </div>
 
+      <!-- ROADMAP -->
+      <div class="about-section">
+        <div class="about-section-title">Roadmap</div>
+        <div style="display:flex;flex-direction:column;gap:0;">
+          <div style="display:flex;gap:12px;padding-bottom:14px;">
+            <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;">
+              <div style="width:22px;height:22px;border-radius:50%;background:var(--text);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:var(--accent-fg);">1</div>
+              <div style="width:1px;background:var(--border);flex:1;margin:4px 0;min-height:14px;"></div>
+            </div>
+            <div>
+              <div style="font-size:12.5px;font-weight:500;color:var(--text);">V1 & V2 — Live now</div>
+              <div style="font-size:11.5px;color:var(--text2);margin-top:2px;">Multi-cloud specialist assistant · Architecture diagrams · Smart mode · PDF & image upload · Confidence scoring</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;padding-bottom:14px;">
+            <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;">
+              <div style="width:22px;height:22px;border-radius:50%;background:var(--surface2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:var(--text2);">2</div>
+              <div style="width:1px;background:var(--border);flex:1;margin:4px 0;min-height:14px;"></div>
+            </div>
+            <div>
+              <div style="font-size:12.5px;font-weight:500;color:var(--text);">V3 — RAG architecture</div>
+              <div style="font-size:11.5px;color:var(--text2);margin-top:2px;">Live documentation retrieval from official AWS, Azure and GCP sources · Always current · Always sourced · Modular LLM support</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;">
+            <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;">
+              <div style="width:22px;height:22px;border-radius:50%;background:var(--surface2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:var(--text2);">3</div>
+            </div>
+            <div>
+              <div style="font-size:12.5px;font-weight:500;color:var(--text);">V4 — Enterprise</div>
+              <div style="font-size:11.5px;color:var(--text2);margin-top:2px;">User context memory · Slack & IDE integration · PII filtering · Private deployment · Compliance layer</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BUILT BY -->
       <div class="about-section">
         <div class="about-section-title">Built By</div>
         <div class="built-by">
           <div class="built-avatar">AJ</div>
           <div>
-            <div class="built-name">Anirudh Jagannadh Suravarjula</div>
-            <div class="built-role">AWS Cloud Platform Engineer · 11 Years</div>
-            <div class="built-note">Built CloudevAI because after 11 years in cloud I still could not find a tool that gave me the right answer with confidence at 2am. So I built it myself.</div>
+            <div class="built-name">Anirudh</div>
+            <div class="built-role">AWS Cloud Platform Engineer · 11 Years · Brisbane, Australia</div>
+            <div class="built-note">Built CloudevAI because after over a decade in cloud infrastructure — across hundreds of production incidents — I could not find a tool that gave me the right answer with confidence when it mattered most. So I built it myself.</div>
           </div>
         </div>
       </div>
 
+      <!-- CTA -->
       <div class="cta-box">
-        <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;">Currently in Beta</div>
-        <p style="font-size:12px;color:var(--text2);line-height:1.7;max-width:380px;margin:0 auto 16px;">Free to use. Your feedback shapes every version. If something is wrong or missing — tell us.</p>
+        <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;">Currently in Beta — Free to use</div>
+        <p style="font-size:12px;color:var(--text2);line-height:1.7;max-width:400px;margin:0 auto 16px;">Every question asked improves the tool. Every piece of feedback shapes what gets built next. If you are an investor or founder interested in this space — reach out.</p>
         <div class="cta-btn" onclick="closeAbout()">Try it now — it is free</div>
       </div>
 
-      <div class="disclaimer-box">⚠ CloudevAI is an independent educational tool in beta. Not affiliated with Amazon Web Services, Microsoft Azure or Google Cloud Platform. Always verify with official documentation before implementing in production.</div>
+      <!-- DISCLAIMER -->
+      <div class="disclaimer-box">⚠ CloudevAI is an independent tool currently in beta. Not affiliated with, endorsed by or officially connected to Amazon Web Services, Microsoft Azure or Google Cloud Platform. All guidance is for educational and informational purposes only. Always verify recommendations with official documentation and test in non-production environments before applying to live systems. The founder accepts no liability for decisions made based on outputs from this tool.</div>
+
     </div>
   </div>
 </div>
 
 <script>
-const SYSTEM=`You are CloudevAI — a decision-making assistant for cloud engineers, not just an information tool. You think like a senior SRE with 11 years of AWS platform engineering. Built by Anirudh Jagannadh.
+// System prompt is securely stored server-side in api/chat.js
+// It is NOT visible here — protected from public access
 
-You specialize in: AWS, Azure, GCP, Terraform, Pulumi, CloudFormation, Linux, Docker, Kubernetes, Helm, GitHub Actions, GitLab CI, Jenkins, CloudWatch, Prometheus, Grafana, networking, security and related DevOps tooling.
+let messages=[],isLoading=false,inChat=false;
 
-CORE PHILOSOPHY — THE MOST IMPORTANT RULE:
-Never wait for perfect information. Deliver value immediately.
-Even with incomplete data — make smart assumptions, give instant insights, THEN ask for refinement.
-You already know 70% of the problem before the user finishes typing.
 
-ASSUMPTION MODE — USE THIS ALWAYS:
-When a user gives limited information, DO NOT ask for more details first.
-Instead:
-1. State your assumption: "Assuming typical [startup/enterprise/microservices] architecture..."
-2. Give instant analysis based on that assumption
-3. THEN ask: "Want deeper analysis? Share your actual architecture or diagram."
-
-Example of WRONG behavior:
-"Please provide more details about your architecture..."
-❌ This is a consultant intake form. Users leave immediately.
-
-Example of RIGHT behavior:
-"Based on typical startup AWS setups, here's what I suspect:
-🔴 Most Likely Issues:
-- Over-provisioned EC2 (paying for idle compute)
-- No caching layer (every request hits database)
-- Missing autoscaling (flat cost even at low traffic)
-💰 Quick wins: Reserved instances → save ~30%
-Want me to analyze your specific setup? Share your diagram."
-✅ User feels value instantly. They stay and engage.
-
-SMART MODE — USE FOR COMPLEX PROBLEMS:
-
-1. ROOT CAUSE CONFIDENCE SCORING:
-Most Likely (X%): [specific cause + reasoning]
-Possible (Y%): [second cause]
-Low (Z%): [third cause]
-
-2. 2-MINUTE EMERGENCY PLAN (production issues):
-🚨 Check RIGHT NOW:
-1. [Most critical check]
-2. [Second check]
-3. [Third check]
-
-3. DECISION TREE:
-IF [condition]:
-→ THEN [specific action]
-ELSE:
-→ THEN [alternative]
-
-4. WHY THIS MATTERS:
-[Cause-effect chain: "Low cache hit → more DB queries → CPU spike → latency"]
-
-5. SECURITY RISKS (ALWAYS include):
-🔴 HIGH: [critical risk]
-🟡 MEDIUM: [moderate risk]
-🟢 LOW: [minor risk]
-
-ARCHITECTURE ANALYSIS MODE:
-When user asks to analyze architecture — even with NO diagram provided:
-IMMEDIATELY give:
-
-🏗️ ASSUMPTION: Based on [startup/scale/pattern] — assuming [ALB → EKS → RDS → S3] unless told otherwise.
-
-🔴 LIKELY INEFFICIENCIES:
-- [Most common issue for this pattern]
-- [Second issue]
-- [Third issue]
-
-💰 COST OPTIMIZATION:
-- Quick win: [specific action] → saves ~X%
-- Medium: [specific action] → saves ~X%
-- High impact: [specific action] → saves ~X%
-
-🔒 SECURITY GAPS:
-- [Risk + severity + fix]
-
-⚡ SCALABILITY:
-- Will break first at 10x: [specific component + why]
-- Fix: [specific solution]
-
-👥 TEAM NEEDS:
-- [Role needed + why]
-
-📅 PRIORITY PLAN:
-1. [Quick win — 1-2 days]
-2. [Quick win — 1-2 days]
-3. [Medium — 1-2 weeks]
-4. [Medium — 1-2 weeks]
-5. [Complex — 1+ month]
-
-Then offer: "Upload your actual diagram or describe your stack for precise recommendations."
-
-SCOPE: Cloud, DevOps, infrastructure, networking, Linux, CI/CD, containers, IaC, monitoring, security only.
-For unrelated topics: "I specialise in cloud and DevOps only. Happy to help with any infrastructure question!"
-
-SECURITY ALERT: If credentials shared: "🚨 SECURITY ALERT: Rotate these immediately. Never share credentials in chat tools."
-
-DIAGRAM RULE: When user asks for ANY diagram — MANDATORY to generate Mermaid in <diagram></diagram> tags.
-ONLY graph TD or graph LR. NEVER sequenceDiagram or stateDiagram.
-
-<diagram>
-graph TD
-    A[Users] --> B[Load_Balancer]
-    B --> C[Web_Server_1]
-    B --> D[Web_Server_2]
-    C --> E[(Database)]
-    D --> E
-    style A fill:#9ca3af,stroke:#6b7280,color:#fff
-    style B fill:#6b7280,stroke:#4b5563,color:#fff
-    style C fill:#374151,stroke:#1f2937,color:#fff
-    style D fill:#374151,stroke:#1f2937,color:#fff
-    style E fill:#1f2937,stroke:#111827,color:#fff
-</diagram>
-
-MERMAID RULES:
-- ONLY graph TD or graph LR
-- Node IDs: no spaces, use underscore
-- Labels: max 3 words, no colons, no quotes, no parentheses
-- Style EVERY node
-
-CLI RULE: Every command in triple backticks: aws, az, gcloud, terraform, kubectl, docker, bash, powershell, python.
-
-RESPONSE FORMAT FOR COMPLEX PROBLEMS:
-🔍 PROBLEM UNDERSTOOD: [restatement + symptom connection]
-🏗️ ASSUMPTION: [what architecture assumed and why]
-🎯 ROOT CAUSE ANALYSIS: [confidence scored]
-🚨 2-MINUTE EMERGENCY PLAN: [top 3 immediate checks]
-🌳 DECISION TREE: [IF/THEN logic]
-💡 WHY THIS MATTERS: [cause-effect chain]
-✅ STEP-BY-STEP FIX: [numbered steps]
-💻 COMMANDS: [labeled blocks]
-🔒 SECURITY RISKS: [always include]
-💰 COST IMPACT: [savings estimate]
-📅 PRIORITY PLAN: [quick wins first]
-📚 OFFICIAL REFERENCE: [docs link]
-
-Do NOT add disclaimers or signatures at end of answers.`;
 
 let messages=[],isLoading=false,inChat=false;
 let chatHistory=JSON.parse(localStorage.getItem('cv3History')||'[]');
@@ -986,8 +974,34 @@ function addMsg(role,content){
   bu.innerHTML=formatMsg(text);
   div.appendChild(av);div.appendChild(bu);ml.appendChild(div);
   if(code&&role==='ai')ml.appendChild(makeDiagram(code));
+
+  // Add feedback buttons for AI responses
+  if(role==='ai'){
+    const fbId='fb-'+Date.now();
+    const fb=document.createElement('div');
+    fb.style.cssText='display:flex;align-items:center;gap:8px;margin-left:42px;margin-top:4px;';
+    fb.innerHTML=`
+      <span style="font-size:10px;color:var(--text3);font-family:\\'DM Mono\\',monospace;">Was this helpful?</span>
+      <button onclick="feedback(true,'${fbId}')" id="${fbId}-yes" style="display:flex;align-items:center;gap:4px;padding:3px 9px;border-radius:6px;border:1px solid var(--border);background:transparent;cursor:pointer;font-size:11px;color:var(--text2);font-family:\\'DM Sans\\',sans-serif;transition:all 0.15s;">
+        👍 Yes
+      </button>
+      <button onclick="feedback(false,'${fbId}')" id="${fbId}-no" style="display:flex;align-items:center;gap:4px;padding:3px 9px;border-radius:6px;border:1px solid var(--border);background:transparent;cursor:pointer;font-size:11px;color:var(--text2);font-family:\\'DM Sans\\',sans-serif;transition:all 0.15s;">
+        👎 No
+      </button>
+      <span id="${fbId}-done" style="display:none;font-size:11px;color:var(--text3);">Thanks for the feedback!</span>`;
+    ml.appendChild(fb);
+  }
+
   const msgs=document.getElementById('messages');
   msgs.scrollTop=msgs.scrollHeight;
+}
+
+function feedback(positive,id){
+  document.getElementById(id+'-yes').style.display='none';
+  document.getElementById(id+'-no').style.display='none';
+  const done=document.getElementById(id+'-done');
+  done.style.display='inline';
+  done.textContent=positive?'👍 Thanks! Glad it helped!':'👎 Thanks! We will improve this.';
 }
 
 function showTyping(){
@@ -1047,7 +1061,7 @@ async function sendMessage(text){
   try{
     const r=await fetch('/api/chat',{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:2000,system:SYSTEM,messages})
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:2000,messages})
     });
     const d=await r.json();removeTyping();
     const reply=d.content?.[0]?.text||'Sorry, could not process that. Please try again.';
