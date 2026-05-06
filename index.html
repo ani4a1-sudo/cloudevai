@@ -824,18 +824,27 @@ function goHome(){
   currentId=null;messages=[];inChat=false;
   document.getElementById('messages').innerHTML=`
     <div class="welcome" id="welcome">
-      <div class="welcome-badge"><span class="welcome-badge-dot"></span>Beta — Free to use</div>
+      <div class="welcome-badge"><span class="welcome-badge-dot"></span>Beta — Free to use · Zero data stored</div>
       <h1>Your cloud expert,<br/><em>always available.</em></h1>
       <p class="welcome-sub">Ask anything about AWS, Azure, GCP, Terraform, Kubernetes, Linux or CI/CD — get production-ready answers instantly.</p>
       <div class="hero-input-wrap" id="heroInputWrap">
-        <textarea class="hero-textarea" id="heroInput" placeholder="Ask me anything about cloud infrastructure..." rows="1" onkeydown="handleHeroKey(event)" oninput="autoResize(this)"></textarea>
+        <div id="heroFilePreview" style="display:none;padding:8px 10px;background:var(--surface2);border-radius:8px;margin-bottom:10px;border:1px solid var(--border);align-items:center;gap:8px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span id="heroFileName" style="font-size:12px;color:var(--text2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+          <button onclick="clearFile('hero')" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:14px;padding:0 2px;">✕</button>
+        </div>
+        <textarea class="hero-textarea" id="heroInput" placeholder="Describe your cloud problem or paste an error message..." rows="1" onkeydown="handleHeroKey(event)" oninput="autoResize(this)"></textarea>
         <div class="hero-input-footer">
+          <label for="heroFileInput" class="upload-btn" title="Attach file, PDF or image">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </label>
+          <input type="file" id="heroFileInput" accept=".pdf,.txt,.log,image/png,image/jpeg,image/jpg,image/webp,image/gif" style="display:none;" onchange="handleFile(event,'hero')">
           <span class="hero-hint">↵ Enter to send</span>
           <button class="hero-send" id="heroSendBtn" onclick="sendFromHero()"><svg viewBox="0 0 24 24"><path d="M2 21L23 12 2 3v7l15 2-15 2z"/></svg></button>
         </div>
       </div>
       <div class="suggestions">
-        <div class="suggestion" onclick="askQuick('How do I fix an AccessDenied error on S3?')">Fix S3 AccessDenied error</div>
+        <div class="suggestion" onclick="askQuick('How do I fix an AccessDenied error on S3?')">Fix S3 AccessDenied</div>
         <div class="suggestion" onclick="askQuick('Write Terraform for an auto-scaling web server on AWS')">Terraform auto-scaling</div>
         <div class="suggestion" onclick="askQuick('Draw me an AWS 3-tier web architecture diagram')">Architecture diagram</div>
         <div class="suggestion" onclick="askQuick('My Kubernetes pod is in CrashLoopBackOff how do I fix it?')">Debug CrashLoopBackOff</div>
