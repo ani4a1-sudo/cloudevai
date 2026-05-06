@@ -98,7 +98,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
   max-width:680px;margin:0 auto;
   display:flex;flex-direction:column;
   align-items:center;text-align:center;
-  padding-top:40px;padding-bottom:40px;
+  padding-top:80px;padding-bottom:40px;
 }
 .welcome-badge{
   display:inline-flex;align-items:center;gap:6px;
@@ -393,11 +393,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
           Beta — Free to use · Zero data stored
         </div>
 
-        <!-- FIX 1: OUTCOME-BASED HEADLINE -->
-        <h1>Analyze your cloud.<br/><em>Fix it in seconds.</em></h1>
-        <p class="welcome-sub">Upload your AWS diagram, paste an error, or describe your setup — get instant root cause analysis, cost savings and security fixes.</p>
+        <h1>Your cloud expert,<br/><em>always available.</em></h1>
+        <p class="welcome-sub">Ask anything about AWS, Azure, GCP, Terraform, Kubernetes, Linux or CI/CD — get production-ready answers instantly.</p>
 
-        <!-- HERO INPUT -->
+        <!-- CLEAN INPUT BOX -->
         <div class="hero-input-wrap" id="heroInputWrap">
           <div id="heroFilePreview" style="display:none;padding:8px 10px;background:var(--surface2);border-radius:8px;margin-bottom:10px;border:1px solid var(--border);align-items:center;gap:8px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
@@ -418,82 +417,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
           </div>
         </div>
 
-        <!-- FIX 2: "TRY THIS SCENARIO" — instant engagement -->
-        <div style="width:100%;max-width:600px;margin-bottom:20px;">
-          <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px;text-align:center;font-family:'DM Mono',monospace;">🔥 Try a real scenario — one click</div>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <button onclick="tryScenario('latency')" style="width:100%;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:10px;cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif;transition:all 0.15s;display:flex;align-items:center;gap:12px;" onmouseover="this.style.borderColor='var(--border2)';this.style.background='var(--surface2)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--surface)'">
-              <span style="font-size:18px;flex-shrink:0;">🚨</span>
-              <div style="text-align:left;">
-                <div style="font-size:13px;font-weight:500;color:var(--text);">Production incident: API latency jumped from 200ms to 2s</div>
-                <div style="font-size:11.5px;color:var(--text3);margin-top:2px;">RDS CPU at 90% · Redis cache hit dropped from 85% to 40%</div>
-              </div>
-            </button>
-            <button onclick="tryScenario('architecture')" style="width:100%;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:10px;cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif;transition:all 0.15s;display:flex;align-items:center;gap:12px;" onmouseover="this.style.borderColor='var(--border2)';this.style.background='var(--surface2)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--surface)'">
-              <span style="font-size:18px;flex-shrink:0;">🏗️</span>
-              <div style="text-align:left;">
-                <div style="font-size:13px;font-weight:500;color:var(--text);">Architecture review: Startup on AWS — find bottlenecks and cost issues</div>
-                <div style="font-size:11.5px;color:var(--text3);margin-top:2px;">React on S3 · Node.js on EKS · PostgreSQL RDS · Redis</div>
-              </div>
-            </button>
-            <button onclick="tryScenario('cost')" style="width:100%;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:10px;cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif;transition:all 0.15s;display:flex;align-items:center;gap:12px;" onmouseover="this.style.borderColor='var(--border2)';this.style.background='var(--surface2)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--surface)'">
-              <span style="font-size:18px;flex-shrink:0;">💰</span>
-              <div style="text-align:left;">
-                <div style="font-size:13px;font-weight:500;color:var(--text);">Cost spike: AWS bill increased 35% unexpectedly this month</div>
-                <div style="font-size:11.5px;color:var(--text3);margin-top:2px;">Find what changed and reduce spend immediately</div>
-              </div>
-            </button>
-          </div>
-        </div>
-
-        <!-- FIX 3: SAMPLE OUTPUT — proof before they ask -->
-        <div style="width:100%;max-width:600px;margin-bottom:20px;">
-          <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px;text-align:center;font-family:'DM Mono',monospace;">📋 What a real answer looks like</div>
-          <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;">
-            <div style="padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--border);font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;">Question: "My S3 bucket is giving 403 errors"</div>
-            <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px;">
-              <div style="border-bottom:1px solid var(--border);padding-bottom:10px;">
-                <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px;font-family:'DM Mono',monospace;">🎯 DIAGNOSIS</div>
-                <div style="font-size:13.5px;color:var(--text);font-weight:500;margin-bottom:4px;">Most Likely (75%): Missing s3:GetObject in bucket policy</div>
-                <div style="font-size:12.5px;color:var(--text2);">Possible (20%): IAM role missing permissions · Low (5%): VPC endpoint issue</div>
-              </div>
-              <div style="border-bottom:1px solid var(--border);padding-bottom:10px;">
-                <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;font-family:'DM Mono',monospace;">🚨 FIX IN 90 SECONDS</div>
-                <div style="background:#0a0a0a;border-radius:7px;padding:10px 12px;font-family:'DM Mono',monospace;font-size:12px;color:#d4d4d4;line-height:1.8;">
-                  aws s3api get-bucket-policy --bucket YOUR-BUCKET<br/>
-                  aws iam simulate-principal-policy --policy-source-arn arn:aws:iam::ACCOUNT:role/ROLE --action-names s3:GetObject
-                </div>
-              </div>
-              <div>
-                <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px;font-family:'DM Mono',monospace;">💡 WHY THIS HAPPENS</div>
-                <div style="font-size:12.5px;color:var(--text2);line-height:1.6;">S3 evaluates bucket policy BEFORE IAM — a deny in bucket policy blocks even admin roles. Check bucket policy first, not IAM.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- FIX 4: TRUST SIGNALS — privacy + data -->
-        <div style="width:100%;max-width:600px;margin-bottom:20px;">
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-            <div style="padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;text-align:center;">
-              <div style="font-size:16px;margin-bottom:6px;">🔒</div>
-              <div style="font-size:12px;font-weight:500;color:var(--text);margin-bottom:3px;">Zero data stored</div>
-              <div style="font-size:11px;color:var(--text3);line-height:1.5;">Nothing you upload or ask is ever saved by CloudevAI</div>
-            </div>
-            <div style="padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;text-align:center;">
-              <div style="font-size:16px;margin-bottom:6px;">⚡</div>
-              <div style="font-size:12px;font-weight:500;color:var(--text);margin-bottom:3px;">Answer in seconds</div>
-              <div style="font-size:11px;color:var(--text3);line-height:1.5;">Root cause, fix, commands — structured and ready to act</div>
-            </div>
-            <div style="padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;text-align:center;">
-              <div style="font-size:16px;margin-bottom:6px;">👨‍💻</div>
-              <div style="font-size:12px;font-weight:500;color:var(--text);margin-bottom:3px;">Built by engineers</div>
-              <div style="font-size:11px;color:var(--text3);line-height:1.5;">11 years AWS experience — built for real production environments</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- QUICK SUGGESTIONS -->
+        <!-- SIMPLE SUGGESTION PILLS -->
         <div class="suggestions">
           <div class="suggestion" onclick="askQuick('How do I fix an AccessDenied error on S3?')">Fix S3 AccessDenied</div>
           <div class="suggestion" onclick="askQuick('Write Terraform for an auto-scaling web server on AWS')">Terraform auto-scaling</div>
