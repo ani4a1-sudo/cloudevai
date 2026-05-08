@@ -14,7 +14,6 @@
   gtag('js', new Date());
   gtag('config', 'G-X002PMQ1TG');
 </script>
-
 <style>
 :root{
   --bg:#fafaf8;--surface:#ffffff;--surface2:#f4f4f1;--border:#e8e8e2;--border2:#d4d4cc;
@@ -200,63 +199,36 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 .bubble strong{font-weight:600;color:var(--text);}
 .bubble br{display:block;margin:2px 0;}
 
-/* RESPONSE SECTIONS — CLEAN V3 */
-.n2-response{display:flex;flex-direction:column;gap:10px;}
-.n2-section{
-  padding:14px 16px;border-radius:10px;
-  border:1px solid var(--border);
-  background:var(--surface);
-  word-break:break-word;overflow-wrap:break-word;
-}
-.n2-section[data-t="diagnosis"]{border-left:3px solid #3b82f6;background:rgba(59,130,246,0.03);}
-.n2-section[data-t="fix"]{border-left:3px solid #f97316;background:rgba(249,115,22,0.03);}
-.n2-section[data-t="cost"]{border-left:3px solid #16a34a;background:rgba(22,163,74,0.03);}
-.n2-section[data-t="security"]{border-left:3px solid #dc2626;background:rgba(220,38,38,0.03);}
-.n2-section[data-t="multicloud"]{border-left:3px solid #7c3aed;background:rgba(124,58,237,0.03);}
-.n2-section[data-t="decision"]{border-left:3px solid #d97706;background:rgba(217,119,6,0.03);}
-.n2-section[data-t="reference"]{border-left:3px solid var(--border2);background:var(--surface2);}
-.n2-section[data-t="wins"]{border-left:3px solid #16a34a;background:rgba(22,163,74,0.03);}
-[data-theme="dark"] .n2-section[data-t="diagnosis"]{background:rgba(59,130,246,0.07);}
-[data-theme="dark"] .n2-section[data-t="fix"]{background:rgba(249,115,22,0.07);}
-[data-theme="dark"] .n2-section[data-t="cost"]{background:rgba(22,163,74,0.07);}
-[data-theme="dark"] .n2-section[data-t="security"]{background:rgba(220,38,38,0.07);}
-[data-theme="dark"] .n2-section[data-t="multicloud"]{background:rgba(124,58,237,0.07);}
-[data-theme="dark"] .n2-section[data-t="decision"]{background:rgba(217,119,6,0.07);}
-[data-theme="dark"] .n2-section[data-t="wins"]{background:rgba(22,163,74,0.07);}
+/* NOTION STYLE RESPONSE — UPGRADED */
+.n2-response{display:flex;flex-direction:column;gap:0;}
+.n2-section{padding:14px 0;border-bottom:1px solid var(--border);}
+.n2-section:first-child{padding-top:0;}
+.n2-section:last-child{border-bottom:none;padding-bottom:0;}
 .n2-label{
-  font-size:11px;font-weight:700;color:var(--text3);
-  text-transform:uppercase;letter-spacing:0.8px;
+  font-size:10px;font-weight:700;color:var(--text3);
+  text-transform:uppercase;letter-spacing:1px;
   margin-bottom:10px;font-family:'DM Mono',monospace;
   display:flex;align-items:center;gap:6px;
 }
-.n2-section[data-t="diagnosis"] .n2-label{color:#3b82f6;}
-.n2-section[data-t="fix"] .n2-label{color:#f97316;}
-.n2-section[data-t="cost"] .n2-label{color:#16a34a;}
-.n2-section[data-t="security"] .n2-label{color:#dc2626;}
-.n2-section[data-t="multicloud"] .n2-label{color:#7c3aed;}
-.n2-section[data-t="decision"] .n2-label{color:#d97706;}
-.n2-section[data-t="wins"] .n2-label{color:#16a34a;}
-.n2-body{font-size:14.5px;color:var(--text);line-height:1.85;margin:3px 0;word-break:break-word;}
+.n2-body{font-size:15px;color:var(--text);line-height:1.8;margin:3px 0;}
 .n2-body strong{font-weight:600;color:var(--text);}
 .n2-steps{display:flex;flex-direction:column;gap:10px;margin-top:4px;}
 .n2-step{display:flex;gap:12px;align-items:flex-start;}
 .n2-num{
   font-size:11px;font-weight:700;color:var(--text3);
-  min-width:22px;height:22px;
-  background:var(--surface2);border:1px solid var(--border);
-  border-radius:6px;display:flex;align-items:center;justify-content:center;
-  font-family:'DM Mono',monospace;flex-shrink:0;margin-top:2px;
+  min-width:24px;font-family:'DM Mono',monospace;
+  padding-top:2px;
 }
-.n2-step-text{font-size:14.5px;color:var(--text);line-height:1.7;font-weight:500;}
+.n2-step-text{font-size:15px;color:var(--text);line-height:1.7;font-weight:500;}
 .n2-step-desc{font-size:13px;color:var(--text2);margin-top:3px;line-height:1.6;}
 .n2-bullets{display:flex;flex-direction:column;gap:6px;margin-top:4px;}
-.n2-bullet{display:flex;gap:10px;font-size:14.5px;color:var(--text);line-height:1.7;}
+.n2-bullet{display:flex;gap:10px;font-size:15px;color:var(--text);line-height:1.7;}
 .n2-dash{color:var(--text3);flex-shrink:0;font-weight:300;}
 .ic{
   background:var(--surface2);padding:2px 7px;border-radius:5px;
-  font-family:'DM Mono',monospace;font-size:12.5px;
+  font-family:'DM Mono',monospace;font-size:13px;
   color:var(--text);border:1px solid var(--border);
-  font-weight:500;word-break:break-all;
+  font-weight:500;
 }
 
 /* CODE BLOCKS */
@@ -1030,18 +1002,6 @@ function formatMsg(rawText){
     out=out.replace(/\n/g,'<br>');
     return out;
   }
-  function getSectionType(title){
-    const t=(title||'').toLowerCase();
-    if(t.match(/diagno|root cause|most likely|analysis/))return'diagnosis';
-    if(t.match(/fix|repair|solution|emergency|90.sec|command|resolution/))return'fix';
-    if(t.match(/cost|price|saving|finops|billing|budget/))return'cost';
-    if(t.match(/security|risk|vulnerab|credential/))return'security';
-    if(t.match(/multi.cloud|azure|gcp|equivalent/))return'multicloud';
-    if(t.match(/if|decision|tree|alternative/))return'decision';
-    if(t.match(/reference|doc|link|source/))return'reference';
-    if(t.match(/quick win|immediate|action/))return'wins';
-    return'';
-  }
   let html='<div class="n2-response">';
   for(const sec of sections){
     if(!sec.emoji){
@@ -1051,9 +1011,7 @@ function formatMsg(rawText){
     }else{
       let bodyLines=sec.body.slice();let bodyText=bodyLines.join('\n');
       codeBlocks.forEach((b,i)=>{bodyText=bodyText.replace('__C'+i+'__',b);bodyLines=bodyText.split('\n');});
-      const dt=getSectionType(sec.title);
-      const dtAttr=dt?` data-t="${dt}"`:'';
-      html+=`<div class="n2-section"${dtAttr}><div class="n2-label">${sec.emoji} ${sec.title}</div>${renderBody(bodyLines)}</div>`;
+      html+=`<div class="n2-section"><div class="n2-label">${sec.emoji} ${sec.title}</div>${renderBody(bodyLines)}</div>`;
     }
   }
   return html+'</div>';
