@@ -14,7 +14,8 @@
   gtag('js', new Date());
   gtag('config', 'G-X002PMQ1TG');
 </script>
-  <style>
+
+<style>
 :root{
   --bg:#fafaf8;--surface:#ffffff;--surface2:#f4f4f1;--border:#e8e8e2;--border2:#d4d4cc;
   --text:#18181a;--text2:#6b6b6e;--text3:#a8a8ab;--accent:#18181a;--accent-fg:#ffffff;
@@ -800,450 +801,96 @@ function saveChat(first){
   }
   const c=chatHistory.find(x=>x.id===currentId);
   if(c){c.messages=[...messages];localStorage.setItem('cv3History',JSON.stringify(chatHistory));}
-  renderHistory();
-}
+  
+// ═══════════════════════════════════════════
+// CLOUDEVAI ANALYTICS — Investor-grade tracking
+// ═══════════════════════════════════════════
+let sessionMsgCount = 0;
+let sessionStartTime = Date.now();
 
-function loadChat(id){
-  const c=chatHistory.find(x=>x.id===id);if(!c)return;
-  currentId=id;messages=[...c.messages];
-  switchToChat();
-  document.getElementById('messages').innerHTML='<div class="msg-list" id="msgList"></div>';
-  messages.forEach(m=>addMsg(m.role==='user'?'user':'ai',m.content));
-  renderHistory();
-}
-
-function delChat(id,e){
-  e.stopPropagation();
-  chatHistory=chatHistory.filter(c=>c.id!==id);
-  localStorage.setItem('cv3History',JSON.stringify(chatHistory));
-  if(currentId===id)goHome();else renderHistory();
-}
-
-function switchToChat(){
-  if(!inChat){
-    inChat=true;
-    document.getElementById('messages').innerHTML='<div class="msg-list" id="msgList"></div>';
-    document.getElementById('chatInputArea').style.display='block';
-    document.getElementById('messages').style.paddingTop='24px';
+function track(eventName, params = {}) {
+  if (typeof gtag !== 'undefined') {
+    gtag('event', eventName, params);
   }
 }
 
-function goHome(){
-  currentId=null;messages=[];inChat=false;
-  document.getElementById('messages').innerHTML=`
-    <div class="welcome" id="welcome">
-      <div class="welcome-badge"><span class="welcome-badge-dot"></span>Beta — Free to use · Zero data stored</div>
-      <h1>Your cloud expert,<br/><em>always available.</em></h1>
-      <p class="welcome-sub">Ask anything about AWS, Azure, GCP, Terraform, Kubernetes, Linux or CI/CD — get production-ready answers instantly.</p>
-      <div class="hero-input-wrap" id="heroInputWrap">
-        <div id="heroFilePreview" style="display:none;padding:8px 10px;background:var(--surface2);border-radius:8px;margin-bottom:10px;border:1px solid var(--border);align-items:center;gap:8px;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          <span id="heroFileName" style="font-size:12px;color:var(--text2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
-          <button onclick="clearFile('hero')" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:14px;padding:0 2px;">✕</button>
-        </div>
-        <textarea class="hero-textarea" id="heroInput" placeholder="Describe your cloud problem or paste an error message..." rows="1" onkeydown="handleHeroKey(event)" oninput="autoResize(this)"></textarea>
-        <div class="hero-input-footer">
-          <button class="upload-btn" onclick="document.getElementById('heroFileInput').click()" title="Attach file, PDF or image">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          </button>
-          <input type="file" id="heroFileInput" accept=".pdf,.txt,.log,image/png,image/jpeg,image/jpg,image/webp,image/gif" style="display:none;" onchange="handleFile(event,'hero')">
-          <span class="hero-hint">↵ Enter to send</span>
-          <button class="hero-send" id="heroSendBtn" onclick="sendFromHero()"><svg viewBox="0 0 24 24"><path d="M2 21L23 12 2 3v7l15 2-15 2z"/></svg></button>
-        </div>
-      </div>
-      <div class="suggestions">
-        <div class="suggestion" onclick="askQuick('How do I fix an AccessDenied error on S3?')">Fix S3 AccessDenied</div>
-        <div class="suggestion" onclick="askQuick('Write Terraform for an auto-scaling web server on AWS')">Terraform auto-scaling</div>
-        <div class="suggestion" onclick="askQuick('Draw me an AWS 3-tier web architecture diagram')">Architecture diagram</div>
-        <div class="suggestion" onclick="askQuick('My Kubernetes pod is in CrashLoopBackOff how do I fix it?')">Debug CrashLoopBackOff</div>
-        <div class="suggestion" onclick="askQuick('How do I set up a CI/CD pipeline with GitHub Actions?')">GitHub Actions CI/CD</div>
-        <div class="suggestion" onclick="askQuick('How do I reduce my AWS bill?')">Cut cloud costs</div>
-      </div>
-    </div>`;
-  document.getElementById('chatInputArea').style.display='none';
-  document.getElementById('messages').style.paddingTop='40px';
-  renderHistory();
+function detectService(text) {
+  const t = (text || '').toLowerCase();
+  if (t.match(/\becs\b|fargate|container/)) return 'ECS';
+  if (t.match(/\beks\b|kubernetes|\bk8s\b|kubectl/)) return 'EKS';
+  if (t.match(/\blambda\b|serverless|function/)) return 'Lambda';
+  if (t.match(/\bec2\b|instance|ami/)) return 'EC2';
+  if (t.match(/\brds\b|aurora|postgres|mysql|database/)) return 'RDS';
+  if (t.match(/\bdynamodb\b|dynamo/)) return 'DynamoDB';
+  if (t.match(/\bs3\b|bucket|object storage/)) return 'S3';
+  if (t.match(/\biam\b|policy|permission|role/)) return 'IAM';
+  if (t.match(/\bvpc\b|subnet|security group|nacl/)) return 'VPC';
+  if (t.match(/\blb\b|alb|nlb|load.balanc/)) return 'ALB';
+  if (t.match(/\bcloudfront\b|cdn|distribution/)) return 'CloudFront';
+  if (t.match(/\bterraform\b|\btf\b|\biac\b|hcl/)) return 'Terraform';
+  if (t.match(/\bgitlab\b|\bcicd\b|pipeline|github.action/)) return 'CI/CD';
+  if (t.match(/\bcloudwatch\b|alarm|metric|log/)) return 'CloudWatch';
+  if (t.match(/\bazure\b/)) return 'Azure';
+  if (t.match(/\bgcp\b|google cloud/)) return 'GCP';
+  if (t.match(/\bmgn\b|migration/)) return 'MGN';
+  return 'General';
 }
 
-function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,160)+'px';}
-function handleHeroKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendFromHero();}}
-function handleChatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendFromChat();}}
-
-function getInput(){
-  if(!inChat){
-    const el=document.getElementById('heroInput');
-    return el?el.value.trim():'';
-  }
-  const el=document.getElementById('chatInput');
-  return el?el.value.trim():'';
+function detectCategory(text) {
+  const t = (text || '').toLowerCase();
+  if (t.match(/cost|bill|expensive|saving|budget|finops/)) return 'cost_optimization';
+  if (t.match(/security|breach|vuln|permission|iam|waf|exposed/)) return 'security';
+  if (t.match(/slow|latency|timeout|performance|speed/)) return 'performance';
+  if (t.match(/error|fail|crash|down|503|502|504|403|404/)) return 'incident';
+  if (t.match(/terraform|iac|infra as code|drift/)) return 'iac';
+  if (t.match(/architect|design|diagram|pattern|best practice/)) return 'architecture';
+  if (t.match(/scale|scaling|auto.?scal|capacity/)) return 'scaling';
+  if (t.match(/network|vpc|subnet|routing|dns/)) return 'networking';
+  if (t.match(/deploy|ci.?cd|pipeline|release/)) return 'deployment';
+  if (t.match(/migrat/)) return 'migration';
+  return 'general_query';
 }
 
-function clearInput(){
-  if(!inChat){const el=document.getElementById('heroInput');if(el){el.value='';el.style.height='auto';}}
-  else{const el=document.getElementById('chatInput');if(el){el.value='';el.style.height='auto';}}
+renderHistory();
+let sessionMsgCount = 0;
+let sessionStartTime = Date.now();
+
+
+function detectService(text) {
+  const t = (text || '').toLowerCase();
+  if (t.match(/\becs\b|fargate|container/)) return 'ECS';
+  if (t.match(/\beks\b|kubernetes|\bk8s\b|kubectl/)) return 'EKS';
+  if (t.match(/\blambda\b|serverless|function/)) return 'Lambda';
+  if (t.match(/\bec2\b|instance|ami/)) return 'EC2';
+  if (t.match(/\brds\b|aurora|postgres|mysql|database/)) return 'RDS';
+  if (t.match(/\bdynamodb\b|dynamo/)) return 'DynamoDB';
+  if (t.match(/\bs3\b|bucket|object storage/)) return 'S3';
+  if (t.match(/\biam\b|policy|permission|role/)) return 'IAM';
+  if (t.match(/\bvpc\b|subnet|security group|nacl/)) return 'VPC';
+  if (t.match(/\blb\b|alb|nlb|load.balanc/)) return 'ALB';
+  if (t.match(/\bcloudfront\b|cdn|distribution/)) return 'CloudFront';
+  if (t.match(/\bterraform\b|\btf\b|\biac\b|hcl/)) return 'Terraform';
+  if (t.match(/\bgitlab\b|\bcicd\b|pipeline|github.action/)) return 'CI/CD';
+  if (t.match(/\bcloudwatch\b|alarm|metric|log/)) return 'CloudWatch';
+  if (t.match(/\bazure\b/)) return 'Azure';
+  if (t.match(/\bgcp\b|google cloud/)) return 'GCP';
+  if (t.match(/\bmgn\b|migration/)) return 'MGN';
+  return 'General';
 }
 
-function sendFromHero(){const t=getInput();if(t)sendMessage(t);}
-function sendFromChat(){const t=getInput();if(t)sendMessage(t);}
-function askQuick(q){
-  switchToChat();
-  setTimeout(()=>{
-    const el=document.getElementById('chatInput');
-    if(el){el.value=q;sendFromChat();}
-  },50);
-}
-
-// COPY
-function copyText(text,id){
-  navigator.clipboard.writeText(text.trim()).then(()=>{
-    const b=document.getElementById(id);if(!b)return;
-    const tt=document.getElementById('tt-'+id);
-    if(tt)tt.textContent='Copied!';
-    b.classList.add('ok');
-    setTimeout(()=>{b.classList.remove('ok');if(tt)tt.textContent='Copy';},2000);
-  });
-}
-
-// FORMAT
-function extractDiagram(text){
-  const m=text.match(/<diagram>([\s\S]*?)<\/diagram>/i);
-  if(m)return{code:m[1].trim(),text:text.replace(/<diagram>[\s\S]*?<\/diagram>/gi,'').trim()};
-  return{code:null,text};
-}
-
-// SECTION CONFIGS — maps emoji headers to visual styles
-// FILE UPLOAD
-let uploadedFile=null;
-
-function handleFile(e,src){
-  const file=e.target.files[0];
-  if(!file)return;
-  if(file.size>10*1024*1024){alert('File too large. Maximum 10MB.');return;}
-  const isImage=file.type.startsWith('image/');
-  const isPdf=file.type==='application/pdf';
-  const reader=new FileReader();
-  reader.onload=ev=>{
-    uploadedFile={name:file.name,type:file.type,data:ev.target.result,isPdf,isImage};
-    const prev=document.getElementById(src==='hero'?'heroFilePreview':'chatFilePreview');
-    const nm=document.getElementById(src==='hero'?'heroFileName':'chatFileName');
-    if(prev){prev.style.display='flex';}
-    if(nm)nm.textContent=(isImage?'🖼️ ':'📄 ')+file.name;
-  };
-  reader.readAsDataURL(file);
-  e.target.value='';
-}
-
-function clearFile(src){
-  uploadedFile=null;
-  const ids=src==='hero'?['heroFilePreview','heroFileName','heroFileInput']:['chatFilePreview','chatFileName','chatFileInput'];
-  ids.forEach(id=>{const el=document.getElementById(id);if(el){el.style.display=el.tagName==='INPUT'?'none':'none';if(el.tagName!=='INPUT')el.textContent||el.style;el.value='';}});
-  const prev=document.getElementById(ids[0]);if(prev)prev.style.display='none';
-}
-
-// Option 2 — Notion style formatter
-function parseSections(text){
-  const lines=text.split('\n');
-  const sections=[];let cur=null;
-  const hRx=/^([\u{1F300}-\u{1FAFF}]|\uD83D[\uDC00-\uDFFF]|\uD83C[\uDF00-\uDFFF]|[\u2600-\u27BF]|🔍|🏗️|🎯|🚨|🌳|💡|✅|💻|🔒|💰|📅|📚|⚠️)\s+([A-Z][A-Z\s\-:]{3,})(?::)?\s*$/u;
-  for(const line of lines){
-    const m=line.match(hRx);
-    if(m){if(cur)sections.push(cur);cur={emoji:m[1],title:m[2].trim().replace(/:$/,''),body:[]};}
-    else{if(cur)cur.body.push(line);else{if(!sections.length||sections[sections.length-1].emoji)sections.push({emoji:null,title:null,body:[]});sections[sections.length-1].body.push(line);}}
-  }
-  if(cur)sections.push(cur);
-  return sections;
-}
-
-function formatInline(t){
-  t=t.replace(/`([^`]+)`/g,'<span class="ic">$1</span>');
-  t=t.replace(/\*\*([^*]+)\*\*/g,'<strong style="font-weight:500;color:var(--text);">$1</strong>');
-  return t;
-}
-
-function renderBody(lines){
-  const parts=[];let stepN=0;
-  const allText=lines.join('\n');
-  if(allText.match(/^IF\s+/im))return`<div style="font-family:\'DM Mono\',monospace;font-size:14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;line-height:1.9;white-space:pre-wrap;color:var(--text);">${allText.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`;
-  for(let i=0;i<lines.length;i++){
-    const ln=lines[i];
-    const sM=ln.match(/^(\d+)\.\s+(.+)/);
-    const bM=ln.match(/^[-•]\s+(.+)/);
-    if(sM){
-      stepN++;
-      const nxt=lines[i+1]||'';let desc='';
-      if(nxt&&(nxt.match(/^\s{2,}/)||(!nxt.match(/^\d+\.\s/)&&!nxt.match(/^[-•]\s/)&&nxt.trim()&&!nxt.match(/^[🔍🎯🚨🌳💡✅💻🔒💰📅📚⚠️]\s+[A-Z]/)))){desc=`<div class="n2-step-desc">${formatInline(nxt.trim())}</div>`;i++;}
-      parts.push(`<div class="n2-step"><span class="n2-num">0${stepN}</span><div><div class="n2-step-text">${formatInline(sM[2])}</div>${desc}</div></div>`);
-    }else if(bM){parts.push(`<div class="n2-bullet"><span class="n2-dash">—</span><span>${formatInline(bM[1])}</span></div>`);}
-    else if(ln.trim()){parts.push(`<div class="n2-body" style="margin:3px 0;">${formatInline(ln)}</div>`);}
-  }
-  return parts.join('');
-}
-
-function formatMsg(rawText){
-  const codeBlocks=[];
-  const mkCodeBlock=(lang,code)=>{
-    cpN++;const bid='cp-'+cpN;
-    const labels={aws:'AWS CLI',az:'Azure CLI',gcloud:'GCP CLI',terraform:'Terraform',kubectl:'Kubectl',docker:'Docker',bash:'Bash',shell:'Shell',powershell:'PowerShell',python:'Python SDK',yaml:'YAML',json:'JSON',hcl:'HCL'};
-    const label=labels[(lang||'').toLowerCase()]||(lang?lang.toUpperCase():'Command');
-    const esc=code.replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    window['__code_'+bid]=code.trim();
-    return`<div class="code-block"><div class="code-head"><span class="code-lang">${label}</span><button class="cp-btn" id="${bid}" onclick="copyCode(\'${bid}\')"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="cp-tooltip" id="tt-${bid}">Copy</span></button></div><pre>${esc.trim()}</pre></div>`;
-  };
-  let text=rawText.replace(/\`\`\`(\w*)\n?([\s\S]*?)\`\`\`/g,(_,lang,code)=>{
-    const ph='__C'+codeBlocks.length+'__';
-    codeBlocks.push(mkCodeBlock(lang,code));return ph;
-  });
-  const sections=parseSections(text);
-  const hasStructure=sections.some(s=>s.emoji);
-  if(!hasStructure){
-    let out=rawText.replace(/\`\`\`(\w*)\n?([\s\S]*?)\`\`\`/g,(_,l,c)=>mkCodeBlock(l,c));
-    out=out.replace(/`([^`]+)`/g,'<span class="ic">$1</span>');
-    out=out.replace(/\*\*([^*]+)\*\*/g,'<strong style="font-weight:500;">$1</strong>');
-    out=out.replace(/\n/g,'<br>');
-    return out;
-  }
-  let html='<div class="n2-response">';
-  for(const sec of sections){
-    if(!sec.emoji){
-      let body=sec.body.join('\n');
-      codeBlocks.forEach((b,i)=>{body=body.replace('__C'+i+'__',b);});
-      if(body.trim())html+=`<div class="n2-section"><div class="n2-body">${formatInline(body.replace(/\n/g,'<br>'))}</div></div>`;
-    }else{
-      let bodyLines=sec.body.slice();let bodyText=bodyLines.join('\n');
-      codeBlocks.forEach((b,i)=>{bodyText=bodyText.replace('__C'+i+'__',b);bodyLines=bodyText.split('\n');});
-      html+=`<div class="n2-section"><div class="n2-label">${sec.emoji} ${sec.title}</div>${renderBody(bodyLines)}</div>`;
-    }
-  }
-  return html+'</div>';
-}
-
-function copyCode(bid){
-  const code=window['__code_'+bid]||'';
-  navigator.clipboard.writeText(code).then(()=>{
-    const b=document.getElementById(bid);if(!b)return;
-    const tt=document.getElementById('tt-'+bid);
-    if(tt)tt.textContent='Copied!';
-    b.classList.add('ok');
-    setTimeout(()=>{b.classList.remove('ok');if(tt)tt.textContent='Copy';},2000);
-  });
-}
-
-function makeDiagram(code){
-  diagN++;
-  const id='d-'+diagN,cid='dc-'+diagN;
-  const wrap=document.createElement('div');wrap.className='diag-wrap';
-  const box=document.createElement('div');box.className='diag-box';box.id=id;
-  const bar=document.createElement('div');bar.className='diag-bar';
-  bar.innerHTML=`<span class="diag-title">Diagram</span>
-    <button class="diag-btn" id="${cid}" onclick="copyDiag('${id}','${cid}')"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy</button>
-    <button class="diag-btn" onclick="editDiag('${id}')"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</button>
-    <button class="diag-btn" onclick="dlDiag('${id}')"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download</button>`;
-  const content=document.createElement('div');content.className='diag-content';content.setAttribute('data-m',code);
-  const md=document.createElement('div');md.className='mermaid';md.textContent=code;
-  content.appendChild(md);box.appendChild(bar);box.appendChild(content);wrap.appendChild(box);
-  setTimeout(()=>{
-    if(window.mermaid){
-      try{mermaid.init(undefined,md);}
-      catch(e){md.innerHTML='<div style="padding:20px;text-align:center;font-size:13px;color:var(--text2);">⚠️ Diagram could not render. <strong>Click Edit</strong> to view in Mermaid Live.</div>';}
-    }
-  },800);
-  return wrap;
-}
-
-function copyDiag(id,bid){
-  const code=document.getElementById(id).querySelector('.diag-content').getAttribute('data-m');
-  navigator.clipboard.writeText(code).then(()=>{
-    const b=document.getElementById(bid);const o=b.innerHTML;
-    b.innerHTML='✓ Copied';b.classList.add('ok');
-    setTimeout(()=>{b.innerHTML=o;b.classList.remove('ok');},2000);
-  });
-}
-function editDiag(id){
-  const code=document.getElementById(id).querySelector('.diag-content').getAttribute('data-m');
-  const state={code,mermaid:{theme:'default'}};
-  window.open('https://mermaid.live/edit#base64:'+btoa(unescape(encodeURIComponent(JSON.stringify(state)))),'_blank');
-}
-function dlDiag(id){
-  const code=document.getElementById(id).querySelector('.diag-content').getAttribute('data-m');
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([code],{type:'text/plain'}));
-  a.download='diagram.mmd';a.click();
-}
-
-function getMsgList(){
-  let ml=document.getElementById('msgList');
-  if(!ml){
-    const msgs=document.getElementById('messages');
-    msgs.innerHTML='<div class="msg-list" id="msgList"></div>';
-    ml=document.getElementById('msgList');
-  }
-  return ml;
-}
-
-function addMsg(role,content){
-  switchToChat();
-  const{code,text}=extractDiagram(content);
-  const ml=getMsgList();
-  const div=document.createElement('div');div.className='msg '+role;
-  const av=document.createElement('div');av.className='av '+(role==='ai'?'ai-av':'user-av');
-  if(role==='ai'){
-    av.innerHTML=`<svg width="17" height="17" viewBox="0 0 100 70" fill="none">
-      <path d="M15 55 Q5 55 5 44 Q5 33 16 33 Q16 18 30 18 Q36 12 44 14 Q50 6 62 8 Q76 8 78 22 Q88 22 90 32 Q94 44 84 50 Q80 57 70 57 Z"
-        fill="var(--accent-fg)" stroke="none"/>
-    </svg>`;
-  } else {
-    av.textContent='ME';
-  }
-  const bu=document.createElement('div');bu.className='bubble';
-  bu.innerHTML=formatMsg(text);
-  div.appendChild(av);div.appendChild(bu);ml.appendChild(div);
-  if(code&&role==='ai')ml.appendChild(makeDiagram(code));
-
-  // Add feedback buttons for AI responses
-  if(role==='ai'){
-    const fbId='fb-'+Date.now();
-    const fb=document.createElement('div');
-    fb.style.cssText='display:flex;align-items:center;gap:8px;margin-left:42px;margin-top:4px;';
-    fb.innerHTML=`
-      <span style="font-size:10px;color:var(--text3);font-family:\\'DM Mono\\',monospace;">Was this helpful?</span>
-      <button onclick="feedback(true,'${fbId}')" id="${fbId}-yes" style="display:flex;align-items:center;gap:4px;padding:3px 9px;border-radius:6px;border:1px solid var(--border);background:transparent;cursor:pointer;font-size:11px;color:var(--text2);font-family:\\'DM Sans\\',sans-serif;transition:all 0.15s;">
-        👍 Yes
-      </button>
-      <button onclick="feedback(false,'${fbId}')" id="${fbId}-no" style="display:flex;align-items:center;gap:4px;padding:3px 9px;border-radius:6px;border:1px solid var(--border);background:transparent;cursor:pointer;font-size:11px;color:var(--text2);font-family:\\'DM Sans\\',sans-serif;transition:all 0.15s;">
-        👎 No
-      </button>
-      <span id="${fbId}-done" style="display:none;font-size:11px;color:var(--text3);">Thanks for the feedback!</span>`;
-    ml.appendChild(fb);
-  }
-
-  const msgs=document.getElementById('messages');
-  msgs.scrollTop=msgs.scrollHeight;
-}
-
-function feedback(positive,id){
-  document.getElementById(id+'-yes').style.display='none';
-  document.getElementById(id+'-no').style.display='none';
-  const done=document.getElementById(id+'-done');
-  done.style.display='inline';
-  done.textContent=positive?'👍 Thanks! Glad it helped!':'👎 Thanks! We will improve this.';
-}
-
-function showTyping(){
-  const ml=getMsgList();
-  const d=document.createElement('div');d.className='msg ai';d.id='typ';
-  const av=document.createElement('div');av.className='av ai-av';
-  av.id='sketchAv';
-  // Sketching cloud — draws itself in loop while AI thinks
-  av.innerHTML=`<svg width="17" height="17" viewBox="0 0 100 70" fill="none">
-    <path id="sketchPath"
-      d="M15 55 Q5 55 5 44 Q5 33 16 33 Q16 18 30 18 Q36 12 44 14 Q50 6 62 8 Q76 8 78 22 Q88 22 90 32 Q94 44 84 50 Q80 57 70 57 Z"
-      stroke="var(--accent-fg)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"
-      fill="none" stroke-dasharray="300" stroke-dashoffset="300"/>
-  </svg>`;
-  const bu=document.createElement('div');bu.className='bubble';
-  bu.innerHTML='<div class="typing-dots"><span></span><span></span><span></span></div>';
-  d.appendChild(av);d.appendChild(bu);ml.appendChild(d);
-  const msgs=document.getElementById('messages');msgs.scrollTop=msgs.scrollHeight;
-
-  // Start sketch loop animation
-  startSketch();
-}
-
-let sketchRAF=null;
-function startSketch(){
-  const path=document.getElementById('sketchPath');
-  if(!path)return;
-  let start=null,phase=0;
-  const total=300;
-  const drawMs=800,pauseMs=200,eraseMs=400;
-
-  function step(ts){
-    if(!document.getElementById('sketchPath')){return;}
-    if(!start)start=ts;
-    const e=ts-start;
-    if(phase===0){
-      const t=Math.min(e/drawMs,1);
-      const ease=t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
-      path.style.strokeDashoffset=total*(1-ease);
-      if(t>=1){phase=1;start=ts;}
-    } else if(phase===1){
-      path.style.strokeDashoffset=0;
-      if(e>pauseMs){phase=2;start=ts;}
-    } else {
-      const t=Math.min(e/eraseMs,1);
-      path.style.strokeDashoffset=total*t;
-      if(t>=1){phase=0;start=ts;}
-    }
-    sketchRAF=requestAnimationFrame(step);
-  }
-  sketchRAF=requestAnimationFrame(step);
-}
-function removeTyping(){
-  if(sketchRAF){cancelAnimationFrame(sketchRAF);sketchRAF=null;}
-  const t=document.getElementById('typ');
-  if(t)t.remove();
-}
-
-async function sendMessage(text){
-  if(isLoading||!text)return;
-  clearInput();
-  isLoading=true;
-  const s1=document.getElementById('heroSendBtn');
-  const s2=document.getElementById('chatSendBtn');
-  if(s1)s1.disabled=true;if(s2)s2.disabled=true;
-
-  // Build user message content
-  let userContent=text;
-  let apiContent=text;
-
-  if(uploadedFile){
-    const fname=uploadedFile.name;
-    const base64=uploadedFile.data.split(',')[1];
-    const mtype=uploadedFile.type;
-
-    if(uploadedFile.isImage){
-      userContent=`🖼️ ${fname}\n\n${text}`;
-      apiContent=[
-        {type:'image',source:{type:'base64',media_type:mtype,data:base64}},
-        {type:'text',text:text||'Analyze this screenshot. Identify any cloud infrastructure issues, errors, or areas for improvement.'}
-      ];
-    } else if(uploadedFile.isPdf){
-      userContent=`📄 ${fname}\n\n${text}`;
-      apiContent=[
-        {type:'document',source:{type:'base64',media_type:'application/pdf',data:base64}},
-        {type:'text',text:text||'Analyze this document and provide cloud architecture recommendations.'}
-      ];
-    } else {
-      // text/log file
-      const decoded=atob(base64);
-      userContent=`📄 ${fname}\n\n${text}`;
-      apiContent=`[File: ${fname}]\n\n${decoded}\n\n${text}`;
-    }
-    clearFile('hero');clearFile('chat');
-  }
-
-  addMsg('user',userContent);
-  messages.push({role:'user',content:apiContent});
-  if(messages.length===1)saveChat(text);
-  showTyping();
-
-  try{
-    const r=await fetch('/api/chat',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:2000,messages})
-    });
-    const d=await r.json();removeTyping();
-    const reply=d.content?.[0]?.text||'Sorry, could not process that. Please try again.';
-    messages.push({role:'assistant',content:reply});
-    saveChat(messages[0].content);
-    addMsg('ai',reply);
-  }catch(e){
-    removeTyping();
-    addMsg('ai','⚠ Connection error. Please check your internet and try again.');
-  }
-  isLoading=false;
-  if(s1)s1.disabled=false;if(s2)s2.disabled=false;
-  const ci=document.getElementById('chatInput');if(ci)ci.focus();
+function detectCategory(text) {
+  const t = (text || '').toLowerCase();
+  if (t.match(/cost|bill|expensive|saving|budget|finops/)) return 'cost_optimization';
+  if (t.match(/security|breach|vuln|permission|iam|waf|exposed/)) return 'security';
+  if (t.match(/slow|latency|timeout|performance|speed/)) return 'performance';
+  if (t.match(/error|fail|crash|down|503|502|504|403|404/)) return 'incident';
+  if (t.match(/terraform|iac|infra as code|drift/)) return 'iac';
+  if (t.match(/architect|design|diagram|pattern|best practice/)) return 'architecture';
+  if (t.match(/scale|scaling|auto.?scal|capacity/)) return 'scaling';
+  if (t.match(/network|vpc|subnet|routing|dns/)) return 'networking';
+  if (t.match(/deploy|ci.?cd|pipeline|release/)) return 'deployment';
+  if (t.match(/migrat/)) return 'migration';
+  return 'general_query';
 }
 
 renderHistory();
