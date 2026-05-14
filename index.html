@@ -146,7 +146,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
   width:100%;background:transparent;border:none;outline:none;
   color:var(--text);font-family:'DM Sans',sans-serif;
   font-size:16px;line-height:1.6;resize:none;
-  max-height:160px;min-height:24px;overflow-y:auto;
+  max-height:280px;min-height:28px;overflow-y:auto;
 }
 .hero-textarea::placeholder{color:var(--text3);}
 .hero-input-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;}
@@ -285,7 +285,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
   flex:1;background:transparent;border:none;outline:none;
   color:var(--text);font-family:'DM Sans',sans-serif;
   font-size:15px;line-height:1.6;resize:none;
-  max-height:120px;min-height:22px;overflow-y:auto;
+  max-height:240px;min-height:24px;overflow-y:auto;
 }
 .chat-textarea::placeholder{color:var(--text3);}
 .chat-send{
@@ -851,9 +851,28 @@ function detectCategory(text) {
   return 'general_query';
 }
 
+
+function autoResize(el){
+  if(!el)return;
+  el.style.height='auto';
+  const maxH=parseInt(getComputedStyle(el).maxHeight)||280;
+  const newH=Math.min(el.scrollHeight,maxH);
+  el.style.height=newH+'px';
+  el.style.overflowY=el.scrollHeight>maxH?'auto':'hidden';
+}
+
+// Auto-resize on page load for any pre-filled inputs
+document.addEventListener('DOMContentLoaded',()=>{
+  ['heroInput','chatInput'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){
+      el.addEventListener('input',()=>autoResize(el));
+      autoResize(el);
+    }
+  });
+});
+
 renderHistory();
-let sessionMsgCount = 0;
-let sessionStartTime = Date.now();
 
 
 function detectService(text) {
